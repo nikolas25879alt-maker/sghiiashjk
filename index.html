@@ -3,444 +3,484 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="EkoSlnko — Solar intelligence platform for Central European homeowners. Real-time monitoring, AI forecasting, and energy savings from a single dashboard.">
-<meta name="theme-color" content="#070910">
-<title>EkoSlnko — Solar Intelligence Platform</title>
+<title>EkoSlnko — Solar Monitoring</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:#070910;color:#dde4ef;font-family:'Manrope',sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden}
-:root{
-  --bg:#070910;--bg1:#0c1018;--bg2:#111622;--bg3:#17202e;--bg4:#1e2d3d;
-  --brd:rgba(255,255,255,.06);--brd2:rgba(255,255,255,.1);
-  --gold:#c9a84c;--gold2:#e8c96e;--gd:linear-gradient(135deg,#c9a84c,#e8c96e);
-  --text:#dde4ef;--t2:#8899b8;--t3:#3d526a;
-  --green:#10b981;--blue:#3b82f6;
-  --fh:'Cormorant Garamond',Georgia,serif;--fb:'Manrope',sans-serif;
-  --r:10px;--rl:18px;--rxl:28px;
-  --sh:0 24px 64px rgba(0,0,0,.6);
-}
-::-webkit-scrollbar{width:4px;background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:#111;font-size:16px;line-height:1.65;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-button{cursor:pointer;font-family:var(--fb);border:none;outline:none;background:none}
-img{max-width:100%;display:block}
-input,textarea,select{font-family:var(--fb)}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;outline:none;background:none}
 ul{list-style:none}
+input,textarea,select{font-family:'DM Sans',sans-serif}
 
-/* NOISE */
-body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.022;mix-blend-mode:overlay}
+:root{
+  --or:#e8601a;
+  --ink:#111;
+  --t1:#555;
+  --t2:#999;
+  --bg:#f7f5f2;
+  --brd:#e8e4de;
+  --fh:'Syne',sans-serif;
+}
+::-webkit-scrollbar{width:3px;background:#fff}
+::-webkit-scrollbar-thumb{background:#e0dbd3;border-radius:3px}
 
-/* UTILITIES */
-.container{max-width:1180px;margin:0 auto;padding:0 40px}
-.tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);padding:5px 14px;border:1px solid rgba(201,168,76,.22);background:rgba(201,168,76,.06);border-radius:40px}
-.tag-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pdot 2s infinite}
-@keyframes pdot{0%,100%{opacity:1}50%{opacity:.3}}
-.sec-title{font-family:var(--fh);font-size:clamp(38px,5vw,66px);font-weight:700;letter-spacing:-.02em;line-height:1.04;margin-top:14px}
-.sec-title em{font-style:italic;font-weight:400;color:var(--gold)}
-.sec-sub{color:var(--t2);font-size:17px;font-weight:300;margin-top:16px;max-width:500px;line-height:1.8}
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 40px}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
 
-/* NAV */
-#nav{position:fixed;top:0;left:0;right:0;z-index:800;padding:22px 0;transition:padding .4s,background .4s,border-color .4s;border-bottom:1px solid transparent}
-#nav.scrolled{padding:14px 0;background:rgba(7,9,16,.84);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-color:var(--brd)}
-.nav-inner{display:flex;align-items:center}
-.nav-logo{font-family:var(--fh);font-weight:700;font-size:20px;letter-spacing:.02em;display:flex;align-items:center;gap:10px;margin-right:auto}
-.nav-sun{width:26px;height:26px;border-radius:50%;background:var(--gd);box-shadow:0 0 0 5px rgba(201,168,76,.12),0 0 18px rgba(201,168,76,.25);animation:sunbr 3.5s ease-in-out infinite;flex-shrink:0}
-@keyframes sunbr{0%,100%{box-shadow:0 0 0 5px rgba(201,168,76,.12),0 0 18px rgba(201,168,76,.25)}50%{box-shadow:0 0 0 9px rgba(201,168,76,.18),0 0 32px rgba(201,168,76,.35)}}
-.nav-logo span{color:var(--gold)}
-.nav-links{display:flex;align-items:center;gap:30px}
-.nav-links a{font-size:13.5px;font-weight:500;color:var(--t2);transition:color .2s}
-.nav-links a:hover{color:var(--text)}
-.nav-right{display:flex;align-items:center;gap:14px;margin-left:36px}
-.nav-tel{font-size:13px;font-weight:600;color:var(--t2);transition:color .2s}
-.nav-tel:hover{color:var(--gold)}
-.nav-cta{background:var(--gd);color:#050608;font-size:13px;font-weight:700;padding:10px 22px;border-radius:40px;box-shadow:0 4px 18px rgba(201,168,76,.28);transition:transform .2s,box-shadow .2s;white-space:nowrap}
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,168,76,.4)}
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:99;padding:18px 0;transition:all .3s;border-bottom:1px solid transparent}
+nav.up{background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-color:var(--brd);padding:12px 0}
+.nav-i{display:flex;align-items:center}
+.logo{font-family:var(--fh);font-size:18px;font-weight:800;display:flex;align-items:center;gap:9px;margin-right:auto}
+.logo-dot{width:24px;height:24px;border-radius:50%;background:var(--or);box-shadow:0 0 0 4px rgba(232,96,26,.12);animation:pulse 3s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(232,96,26,.12)}50%{box-shadow:0 0 0 8px rgba(232,96,26,.18)}}
+.logo span{color:var(--or)}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--t1);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-btn{margin-left:24px;background:var(--ink);color:#fff;font-size:13px;font-weight:500;padding:9px 20px;border-radius:40px;transition:opacity .2s,transform .2s}
+.nav-btn:hover{opacity:.85;transform:translateY(-1px)}
 
-/* HERO */
-#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:130px 40px 80px;position:relative;overflow:hidden;text-align:center}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);-webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent)}
-.hero-glow{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.g1,.g2,.g3{position:absolute;border-radius:50%;filter:blur(90px);opacity:0;transition:opacity 1.2s}
-.g1{width:700px;height:700px;top:-200px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(201,168,76,.14),transparent 70%);animation:d1 14s ease-in-out infinite}
-.g2{width:500px;height:500px;bottom:-150px;left:-80px;background:radial-gradient(circle,rgba(255,120,40,.08),transparent 70%);animation:d2 18s ease-in-out infinite}
-.g3{width:450px;height:450px;top:20%;right:-100px;background:radial-gradient(circle,rgba(59,130,246,.07),transparent 70%);animation:d3 16s ease-in-out infinite}
-.g1.on,.g2.on,.g3.on{opacity:1}
-@keyframes d1{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-40px)}}
-@keyframes d2{0%,100%{transform:scale(1)}50%{transform:scale(1.1) translateY(-25px)}}
-@keyframes d3{0%,100%{transform:translateY(0)}50%{transform:translateY(20px)}}
-.hero-tag{animation:fu .7s .05s both}
-.hero-h1{font-family:var(--fh);font-size:clamp(52px,9vw,128px);font-weight:700;letter-spacing:-.025em;line-height:.95;margin:20px 0 26px;position:relative;z-index:1;animation:fu .7s .15s both}
-.hero-h1 .it{font-style:italic;font-weight:400;color:var(--gold)}
-.hero-lead{font-size:clamp(16px,1.8vw,20px);font-weight:300;color:var(--t2);max-width:580px;line-height:1.75;animation:fu .7s .25s both;margin:0 auto 40px}
-.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fu .7s .35s both;margin-bottom:72px}
-.btn-gold{background:var(--gd);color:#050608;font-weight:700;font-size:15px;padding:14px 32px;border-radius:40px;box-shadow:0 6px 26px rgba(201,168,76,.3);transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:9px}
-.btn-gold:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(201,168,76,.42)}
-.btn-outline{background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--text);font-weight:500;font-size:15px;padding:14px 32px;border-radius:40px;transition:border-color .2s,background .2s,transform .2s;display:inline-flex;align-items:center;gap:9px}
-.btn-outline:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.05);transform:translateY(-2px)}
-.hero-live{display:inline-flex;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:20px;overflow:hidden;animation:fu .7s .45s both;backdrop-filter:blur(8px);flex-wrap:wrap}
-.hl-cell{padding:22px 36px;text-align:center;border-right:1px solid var(--brd)}
-.hl-cell:last-child{border-right:none}
-.hl-n{font-family:var(--fh);font-size:clamp(26px,3vw,38px);font-weight:700;color:var(--gold);letter-spacing:-.03em;line-height:1;display:block;margin-bottom:4px}
-.hl-l{font-size:11px;color:var(--t2);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
-@keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;padding:100px 0 60px;background:var(--bg)}
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-label{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--t2);margin-bottom:20px}
+.hero-h1{font-family:var(--fh);font-size:clamp(44px,5.5vw,76px);font-weight:800;letter-spacing:-.03em;line-height:.96;margin-bottom:22px}
+.hero-h1 span{color:var(--or)}
+.hero-p{font-size:17px;color:var(--t1);font-weight:300;line-height:1.78;max-width:420px;margin-bottom:32px}
+.hero-acts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px}
+.btn-solid{background:var(--or);color:#fff;font-size:14px;font-weight:500;padding:12px 24px;border-radius:40px;display:inline-flex;align-items:center;gap:7px;transition:opacity .2s,transform .2s;box-shadow:0 6px 24px rgba(232,96,26,.25)}
+.btn-solid:hover{opacity:.88;transform:translateY(-2px)}
+.btn-out{border:1px solid var(--brd);color:var(--ink);font-size:14px;font-weight:500;padding:12px 24px;border-radius:40px;transition:border-color .2s,background .2s,transform .2s}
+.btn-out:hover{border-color:#bbb;background:rgba(0,0,0,.03);transform:translateY(-2px)}
+.hero-team{display:flex;align-items:center;gap:12px}
+.h-avs{display:flex}
+.h-av{width:28px;height:28px;border-radius:50%;border:2px solid var(--bg);font-family:var(--fh);font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;color:#fff;margin-left:-6px}
+.h-av:first-child{margin-left:0}
+.hero-team p{font-size:13px;color:var(--t1);font-weight:300}.hero-team strong{color:var(--ink);font-weight:500}
 
-/* MARQUEE */
-.marquee-strip{background:var(--bg1);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);padding:13px 0;overflow:hidden;position:relative;z-index:2}
-.marquee-strip::before,.marquee-strip::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
-.marquee-strip::before{left:0;background:linear-gradient(90deg,var(--bg1),transparent)}
-.marquee-strip::after{right:0;background:linear-gradient(-90deg,var(--bg1),transparent)}
-.marquee-track{display:flex;width:max-content;animation:mq 28s linear infinite}
-.marquee-track:hover{animation-play-state:paused}
-.marquee-item{padding:0 32px;border-right:1px solid var(--brd);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);white-space:nowrap;display:flex;align-items:center;gap:10px}
-.mi-val{color:var(--gold);font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:0}
-@keyframes mq{to{transform:translateX(-50%)}}
+/* Hero right — simple dashboard card */
+.hero-card{background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.09),0 4px 12px rgba(0,0,0,.05);overflow:hidden;border:1px solid var(--brd)}
+.hc-bar{background:#0d0f13;padding:11px 15px;display:flex;align-items:center;gap:7px}
+.hc-dots{display:flex;gap:5px}
+.hcd{width:9px;height:9px;border-radius:50%}
+.hcd:nth-child(1){background:#ff5f57}.hcd:nth-child(2){background:#febc2e}.hcd:nth-child(3){background:#28c840}
+.hc-bar-lbl{font-size:11px;color:rgba(255,255,255,.25);margin:0 auto;letter-spacing:.04em}
+.hc-live{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#28c840;display:flex;align-items:center;gap:4px}
+.hc-ldot{width:5px;height:5px;border-radius:50%;background:#28c840;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hc-body{padding:18px}
+.hc-big{text-align:center;padding:16px 0 14px;border-bottom:1px solid var(--brd);margin-bottom:14px}
+.hc-big-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:5px}
+.hc-big-n{font-family:var(--fh);font-size:48px;font-weight:800;color:var(--or);letter-spacing:-.04em;line-height:1;display:block}
+.hc-big-u{font-size:12px;color:var(--t2);margin-top:2px}
+.hc-kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.hck{background:var(--bg);border-radius:8px;padding:10px 11px}
+.hck-l{font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);margin-bottom:3px}
+.hck-v{font-family:var(--fh);font-size:18px;font-weight:700;letter-spacing:-.02em}
+.hck-u{font-size:9px;color:var(--t2);margin-top:1px}
+.hc-chart-lbl{font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);margin-bottom:6px}
+#hcChart{width:100%;height:44px;display:block}
+.hc-status{margin-top:10px;display:flex;gap:6px}
+.hc-st{flex:1;padding:8px 10px;border-radius:8px;font-size:11px;font-weight:500}
+.hc-st.ok{background:#f0faf4;color:#16a34a;border:1px solid #bbf7d0}
+.hc-st.fc{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe}
+.hc-st-l{font-size:8.5px;opacity:.6;text-transform:uppercase;letter-spacing:.07em;margin-bottom:1px}
 
-/* DEMO */
-#demo{padding:120px 0 100px;position:relative;z-index:2}
-.demo-head{text-align:center;margin-bottom:56px}
-.demo-shell{background:var(--bg1);border:1px solid var(--brd);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,.05)}
-.demo-bar{background:var(--bg2);padding:13px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--brd)}
-.db-dots{display:flex;gap:6px}
-.db-dot{width:11px;height:11px;border-radius:50%}
-.db-dot:nth-child(1){background:#ff5f57}.db-dot:nth-child(2){background:#febc2e}.db-dot:nth-child(3){background:#28c840}
-.db-url{margin:0 auto;padding:5px 16px;background:var(--bg3);border:1px solid var(--brd);border-radius:6px;font-size:12px;color:var(--t3);font-weight:500}
-.db-live{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green)}
-.db-live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pdot 1.4s infinite}
-.demo-layout{display:grid;grid-template-columns:1fr 360px;min-height:520px}
-.demo-sky{position:relative;border-right:1px solid var(--brd);display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,#06090f,#0e1830)}
-#skyCanvas{width:100%;height:280px;display:block}
-.demo-panels{padding:18px 22px 22px;flex:1}
-.dp-lbl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
-.panel-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
-.pc{aspect-ratio:1.5;border-radius:3px;background:var(--bg3);border:1px solid var(--brd);position:relative;overflow:hidden;transition:background .5s,border-color .5s,box-shadow .5s}
-.pc::after{content:'';position:absolute;inset:0;background:linear-gradient(140deg,rgba(255,255,255,.06),transparent 55%)}
-.pc.on{background:linear-gradient(140deg,#142850,#0c1e3c);border-color:rgba(59,130,246,.25);box-shadow:0 0 7px rgba(59,130,246,.15)}
-.pc.hot{background:linear-gradient(140deg,#2a1800,#3d2400);border-color:rgba(201,168,76,.35);box-shadow:0 0 7px rgba(201,168,76,.2)}
-.demo-ctrl{display:flex;flex-direction:column;background:var(--bg1)}
-.dc-sliders{padding:26px 26px 20px;border-bottom:1px solid var(--brd);display:flex;flex-direction:column;gap:20px}
-.dc-sec{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
-.dc-row-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
-.dc-name{font-size:13px;font-weight:500;color:var(--t2)}
-.dc-val{font-family:var(--fh);font-size:17px;font-weight:700;color:var(--text)}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;border-radius:3px;background:var(--bg4);outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gd);box-shadow:0 0 0 3px rgba(201,168,76,.18),0 2px 6px rgba(0,0,0,.4);transition:transform .15s}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
-#sl-time::-webkit-slider-thumb{background:linear-gradient(135deg,#7ecbf5,#3b82f6);box-shadow:0 0 0 3px rgba(59,130,246,.18)}
-#sl-cloud::-webkit-slider-thumb{background:linear-gradient(135deg,#c8d8e8,#8aabb8);box-shadow:0 0 0 3px rgba(140,180,200,.18)}
-.dc-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 26px}
-.kpi{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r);padding:13px 15px;position:relative;overflow:hidden}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
-.kpi.kp::before{background:var(--gd)}.kpi.kk::before{background:linear-gradient(90deg,var(--blue),#7ec8f5)}.kpi.ks::before{background:linear-gradient(90deg,var(--green),#6ee7b7)}.kpi.kc::before{background:linear-gradient(90deg,#8b5cf6,#c4b5fd)}
-.kpi-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
-.kpi-num{font-family:var(--fh);font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1;transition:color .3s}
-.kpi.kp .kpi-num{color:var(--gold)}.kpi.kk .kpi-num{color:var(--blue)}.kpi.ks .kpi-num{color:var(--green)}.kpi.kc .kpi-num{color:#a78bfa}
-.kpi-unit{font-size:11px;color:var(--t3);margin-top:3px}
-.dc-chart{padding:8px 26px 22px}
-.dc-chart-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
-#miniChart{width:100%;height:52px;display:block}
+/* ── SECTIONS COMMON ── */
+.sec{padding:100px 0}
+.sec-alt{background:var(--bg)}
+.sec-tag{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--or);margin-bottom:12px}
+.sec-h{font-family:var(--fh);font-size:clamp(32px,4.5vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.04;margin-bottom:16px}
+.sec-h em{font-style:normal;color:var(--or)}
+.sec-p{font-size:16px;color:var(--t1);font-weight:300;line-height:1.8;max-width:480px}
 
-/* FEATURES */
-#features{padding:100px 0}
-.feat-layout{display:grid;grid-template-columns:1fr 1fr;gap:2px}
-.feat-card{background:var(--bg1);padding:48px 44px;position:relative;overflow:hidden;transition:background .3s}
-.feat-card:hover{background:var(--bg2)}
-.feat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.28),transparent);opacity:0;transition:opacity .3s}
-.feat-card:hover::after{opacity:1}
-.feat-card:nth-child(1){border-radius:var(--rxl) 0 0 0}.feat-card:nth-child(2){border-radius:0 var(--rxl) 0 0}.feat-card:nth-child(5){border-radius:0 0 0 var(--rxl)}.feat-card:nth-child(6){border-radius:0 0 var(--rxl) 0}
-.feat-ico{width:48px;height:48px;border-radius:12px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.14);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:22px;transition:transform .3s,background .3s}
-.feat-card:hover .feat-ico{transform:rotate(-6deg) scale(1.08);background:rgba(201,168,76,.14)}
-.feat-h{font-family:var(--fh);font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
-.feat-p{font-size:14.5px;color:var(--t2);font-weight:300;line-height:1.78}
-.feat-link{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);opacity:.6;transition:opacity .2s,gap .2s}
-.feat-card:hover .feat-link{opacity:1;gap:10px}
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.about-quote{font-size:18px;font-weight:300;font-style:italic;line-height:1.6;color:#333;border-left:3px solid var(--or);padding-left:20px;margin:22px 0 26px}
+.about-p{font-size:15px;color:var(--t1);font-weight:300;line-height:1.85;margin-bottom:14px}
+.about-meta{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.meta-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border:1px solid var(--brd);border-radius:10px}
+.meta-pill strong{font-family:var(--fh);font-size:22px;font-weight:800;color:var(--or);letter-spacing:-.03em}
+.meta-pill span{font-size:12px;color:var(--t1);font-weight:300;line-height:1.3}
 
-/* HOW IT WORKS */
-#how{padding:100px 0;background:var(--bg1);position:relative}
-#how::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(201,168,76,.04),transparent)}
-.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.steps-list{display:flex;flex-direction:column}
-.step{display:flex;gap:22px;padding:28px 0;border-bottom:1px solid var(--brd);transition:background .2s}
+.team-cards{display:flex;flex-direction:column;gap:2px}
+.tm{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);transition:background .2s}
+.tm:hover{background:#eeebe5}
+.tm:first-child{border-radius:14px 14px 0 0}.tm:last-child{border-radius:0 0 14px 14px}
+.tm-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.tm-name{font-size:14px;font-weight:500}
+.tm-role{font-size:12px;color:var(--t2);font-weight:300}
+.tm-tag{margin-left:auto;font-size:10px;font-weight:600;padding:3px 9px;border-radius:40px;white-space:nowrap}
+
+/* ── FEATURES ── */
+.feat-head{text-align:center;margin-bottom:56px}
+.feat-head .sec-p{margin:0 auto}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.fcard{background:#fff;border:1px solid var(--brd);border-radius:16px;padding:28px 24px;transition:border-color .25s,transform .25s,box-shadow .25s}
+.fcard:hover{border-color:rgba(232,96,26,.25);transform:translateY(-4px);box-shadow:0 12px 36px rgba(0,0,0,.07)}
+.fcard-ico{font-size:28px;margin-bottom:14px}
+.fcard-h{font-family:var(--fh);font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.fcard-p{font-size:14px;color:var(--t1);font-weight:300;line-height:1.75}
+
+/* ── DEMO ── */
+.demo-head{text-align:center;margin-bottom:44px}
+.dshell{background:#0d0f13;border-radius:20px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.06)}
+.dbar{background:#080a0e;padding:11px 15px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.05)}
+.ddots{display:flex;gap:5px}
+.dd{width:9px;height:9px;border-radius:50%}
+.dd:nth-child(1){background:#ff5f57}.dd:nth-child(2){background:#febc2e}.dd:nth-child(3){background:#28c840}
+.durl{margin:0 auto;padding:4px 14px;background:#0f1218;border:1px solid rgba(255,255,255,.07);border-radius:5px;font-size:11px;color:rgba(255,255,255,.22)}
+.dlive{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#28c840;display:flex;align-items:center;gap:4px}
+.dldot{width:5px;height:5px;border-radius:50%;background:#28c840;animation:blink 1.4s infinite}
+.demo-body{display:grid;grid-template-columns:1fr 300px;min-height:460px}
+.demo-sky-wrap{display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.05)}
+#skyC{width:100%;height:220px;display:block}
+.demo-panels{padding:16px 18px;background:#080c12;flex:1}
+.dp-lbl{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:8px}
+#dpLbl{}
+.pgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
+.pd{aspect-ratio:1.5;border-radius:2px;background:#1a2232;border:1px solid rgba(255,255,255,.04);position:relative;overflow:hidden;transition:background .5s,box-shadow .5s}
+.pd::after{content:'';position:absolute;inset:0;background:linear-gradient(140deg,rgba(255,255,255,.06),transparent)}
+.pd.on{background:linear-gradient(135deg,#0e2244,#0a1a38);border-color:rgba(59,130,246,.2);box-shadow:0 0 4px rgba(59,130,246,.1)}
+.pd.hot{background:linear-gradient(135deg,#2a1200,#3d1c00);border-color:rgba(232,96,26,.25);box-shadow:0 0 4px rgba(232,96,26,.12)}
+.demo-ctrl{background:#0d1117;display:flex;flex-direction:column;padding:20px}
+.dc-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:14px}
+.dc-sl{margin-bottom:18px}
+.dc-sl-top{display:flex;justify-content:space-between;margin-bottom:6px}
+.dc-sl-name{font-size:12px;color:rgba(255,255,255,.4)}
+.dc-sl-val{font-family:var(--fh);font-size:14px;font-weight:700;color:#fff}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;border-radius:2px;background:rgba(255,255,255,.1);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--or);box-shadow:0 0 0 3px rgba(232,96,26,.2);transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3)}
+#sl-time::-webkit-slider-thumb{background:linear-gradient(135deg,#7ecbf5,#3b82f6);box-shadow:0 0 0 3px rgba(59,130,246,.2)}
+.dc-kpis{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.dkpi{background:rgba(255,255,255,.04);border-radius:8px;padding:10px 11px;display:flex;align-items:center;justify-content:space-between}
+.dkpi-l{font-size:10px;color:rgba(255,255,255,.3);font-weight:500}
+.dkpi-v{font-family:var(--fh);font-size:16px;font-weight:700;letter-spacing:-.02em}
+.dc-chart{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,.05)}
+.dc-chart-l{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:7px}
+#miniC{width:100%;height:44px;display:block}
+
+/* ── HOW ── */
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:18px;padding:24px 0;border-bottom:1px solid var(--brd)}
 .step:last-child{border-bottom:none}
-.step-n{font-family:var(--fh);font-size:52px;font-weight:700;color:rgba(201,168,76,.1);letter-spacing:-.06em;line-height:1;flex-shrink:0;width:52px;transition:color .3s}
-.step:hover .step-n{color:rgba(201,168,76,.28)}
-.step-h{font-family:var(--fh);font-size:21px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
-.step-p{font-size:14px;color:var(--t2);font-weight:300;line-height:1.75}
-.how-visual{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rxl);padding:36px;position:relative;overflow:hidden}
-.how-visual::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;background:radial-gradient(circle,rgba(201,168,76,.1),transparent 70%);filter:blur(40px);border-radius:50%}
-.hv-mock{background:var(--bg);border:1px solid var(--brd);border-radius:var(--rl);overflow:hidden}
-.hv-bar{background:var(--bg3);padding:11px 16px;display:flex;align-items:center;gap:7px}
-.hv-dot{width:8px;height:8px;border-radius:50%}
-.hv-dot:nth-child(1){background:#ff5f57}.hv-dot:nth-child(2){background:#febc2e}.hv-dot:nth-child(3){background:#28c840}
-.hv-body{padding:18px}
-.hv-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.hv-lbl{font-size:12px;color:var(--t3);font-weight:500}
-.hv-val{font-family:var(--fh);font-size:19px;font-weight:700}
-.hv-bar-w{height:3px;background:var(--bg4);border-radius:3px;margin-bottom:14px;overflow:hidden}
-.hv-bar-f{height:100%;border-radius:3px;animation:bfill 1.8s ease-out forwards}
-@keyframes bfill{from{width:0}to{width:var(--w)}}
-.hv-chips{display:flex;gap:8px;flex-wrap:wrap}
-.hv-chip{flex:1;min-width:0;padding:9px 12px;border-radius:8px;font-size:12px;font-weight:600}
-.hv-chip.cg{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:var(--green)}
-.hv-chip.cb{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);color:var(--blue)}
-.hv-chip-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:2px}
+.step-n{font-family:var(--fh);font-size:44px;font-weight:800;color:rgba(0,0,0,.06);letter-spacing:-.06em;line-height:1;flex-shrink:0;width:48px;transition:color .3s}
+.step:hover .step-n{color:rgba(232,96,26,.15)}
+.step-h{font-family:var(--fh);font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:5px}
+.step-p{font-size:14px;color:var(--t1);font-weight:300;line-height:1.75}
+.how-right{background:var(--bg);border-radius:16px;padding:28px;border:1px solid var(--brd)}
+.compat-lbl{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:12px}
+.brands{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.brand{font-size:12px;font-weight:500;padding:5px 12px;background:#fff;border:1px solid var(--brd);border-radius:40px;color:#333}
+.brand.more{color:var(--t2);font-style:italic;font-weight:300}
+.how-note{background:#fff;border-radius:10px;padding:14px;font-size:13px;color:var(--t1);font-weight:300;line-height:1.65;border:1px solid var(--brd)}
+.how-note strong{color:var(--ink);font-weight:500}
 
-/* TESTIMONIALS */
-#testimonials{padding:100px 0}
-.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.test-card{background:var(--bg1);border:1px solid var(--brd);border-radius:var(--rl);padding:34px 30px;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s}
-.test-card:hover{transform:translateY(-5px);border-color:rgba(201,168,76,.2);box-shadow:0 16px 48px rgba(0,0,0,.5)}
-.test-saving{position:absolute;top:24px;right:24px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.22);color:var(--green);font-size:12px;font-weight:700;padding:3px 10px;border-radius:40px}
-.test-stars{font-size:13px;letter-spacing:2px;color:var(--gold);margin-bottom:16px}
-.test-q{font-family:var(--fh);font-style:italic;font-size:17px;font-weight:400;line-height:1.65;color:var(--text);margin-bottom:24px}
-.test-author{display:flex;align-items:center;gap:12px}
-.test-av{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:700;font-size:17px;color:#050608}
-.test-name{font-size:14px;font-weight:600}
-.test-role{font-size:12px;color:var(--t3)}
+/* ── PRICING ── */
+.price-head{text-align:center;margin-bottom:48px}
+.price-toggle{display:inline-flex;margin-top:20px;background:var(--bg);border:1px solid var(--brd);border-radius:40px;padding:3px}
+.ptb{padding:7px 20px;border-radius:40px;font-size:13px;font-weight:500;color:var(--t1);transition:background .2s,color .2s}
+.ptb.on{background:var(--ink);color:#fff}
+.ptb-save{font-size:9px;background:#dcfce7;border:1px solid #86efac;color:#16a34a;padding:1px 6px;border-radius:40px;margin-left:5px;display:none}
+.ptb.on .ptb-save{display:inline}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pcard{background:#fff;border:1px solid var(--brd);border-radius:18px;padding:30px 26px;position:relative;transition:transform .25s,box-shadow .25s,border-color .25s}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.07)}
+.pcard.pop{border-color:rgba(232,96,26,.3)}
+.pc-star{position:absolute;top:14px;right:14px;background:var(--or);color:#fff;font-size:9.5px;font-weight:700;padding:2px 10px;border-radius:40px;letter-spacing:.06em;text-transform:uppercase}
+.pc-tier{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--t2);margin-bottom:10px}
+.pc-price{font-family:var(--fh);font-size:46px;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:2px}
+.pc-price sup{font-size:18px;vertical-align:top;margin-top:9px;color:var(--t2);font-family:'DM Sans',sans-serif;font-weight:300}
+.pc-price .mo{font-size:14px;font-weight:300;color:var(--t2);font-family:'DM Sans',sans-serif}
+.pc-desc{font-size:13.5px;color:var(--t1);font-weight:300;margin-bottom:20px;line-height:1.55}
+.pc-hr{height:1px;background:var(--brd);margin-bottom:18px}
+.pc-list{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.pc-list li{font-size:13.5px;color:var(--t1);font-weight:300;display:flex;gap:8px;align-items:flex-start}
+.pc-list li::before{content:'✓';color:#16a34a;font-weight:700;flex-shrink:0}
+.pc-list li.no{opacity:.38}
+.pc-list li.no::before{content:'—';color:var(--t2)}
+.pcbtn{width:100%;padding:11px;border-radius:40px;font-size:13.5px;font-weight:500;transition:background .2s,transform .2s,border-color .2s}
+.pcbtn-o{border:1px solid var(--brd);color:var(--ink)}.pcbtn-o:hover{border-color:#999;transform:translateY(-1px)}
+.pcbtn-s{background:var(--ink);color:#fff}.pcbtn-s:hover{background:#222;transform:translateY(-1px)}
+.price-hw{text-align:center;margin-top:22px;padding:16px;background:var(--bg);border-radius:12px;font-size:13px;color:var(--t1)}
+.price-hw strong{color:var(--ink);font-weight:500}
 
-/* NUMBERS */
-#numbers{padding:80px 0;background:var(--bg1)}
-.num-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--brd);border-radius:var(--rxl);overflow:hidden}
-.num-cell{padding:48px 28px;text-align:center;border-right:1px solid var(--brd);position:relative;transition:background .3s}
-.num-cell:hover{background:var(--bg2)}
-.num-cell:last-child{border-right:none}
-.num-cell::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--gd);border-radius:2px;transition:width .4s}
-.num-cell:hover::after{width:48px}
-.num-n{font-family:var(--fh);font-size:clamp(38px,4vw,58px);font-weight:700;letter-spacing:-.04em;color:var(--gold);line-height:1;display:block;margin-bottom:8px}
-.num-l{font-size:12px;color:var(--t2);letter-spacing:.09em;text-transform:uppercase;font-weight:600}
-
-/* PRICING */
-#pricing{padding:120px 0}
-.price-head{text-align:center;margin-bottom:52px}
-.price-toggle{display:inline-flex;background:var(--bg2);border:1px solid var(--brd);border-radius:40px;padding:4px;margin-bottom:50px}
-.pt{padding:8px 24px;border-radius:40px;font-size:13px;font-weight:600;color:var(--t2);transition:background .2s,color .2s}
-.pt.on{background:var(--gd);color:#050608}
-.pt-badge{font-size:10px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);color:var(--green);padding:1px 7px;border-radius:40px;margin-left:6px;display:none}
-.pt.on .pt-badge{display:inline}
-.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.pc-card{background:var(--bg1);border:1px solid var(--brd);border-radius:var(--rxl);padding:38px 34px;position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
-.pc-card:hover{transform:translateY(-4px)}
-.pc-card.popular{border-color:rgba(201,168,76,.3);background:linear-gradient(165deg,rgba(201,168,76,.06) 0%,var(--bg1) 55%)}
-.pc-badge{position:absolute;top:18px;right:18px;background:var(--gd);color:#050608;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 12px;border-radius:40px}
-.pc-tier{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:14px}
-.pc-price{font-family:var(--fh);font-size:54px;font-weight:700;letter-spacing:-.04em;line-height:1;margin-bottom:4px}
-.pc-price sup{font-size:22px;vertical-align:top;margin-top:12px;color:var(--t2);font-family:var(--fb);font-weight:400}
-.pc-price span{font-size:17px;font-weight:400;color:var(--t3);font-family:var(--fb)}
-.pc-desc{font-size:14px;color:var(--t2);font-weight:300;margin-bottom:28px}
-.pc-line{height:1px;background:var(--brd);margin-bottom:26px}
-.pc-feats{display:flex;flex-direction:column;gap:11px;margin-bottom:34px}
-.pc-feats li{font-size:14px;color:var(--t2);font-weight:300;display:flex;align-items:flex-start;gap:9px}
-.pc-feats li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
-.pc-feats li.off{opacity:.35}
-.pc-feats li.off::before{content:'×';color:var(--t3)}
-.pc-btn{width:100%;padding:13px;border-radius:40px;font-size:14px;font-weight:700;letter-spacing:.02em;transition:transform .2s,box-shadow .2s,border-color .2s}
-.pc-btn-o{border:1px solid rgba(255,255,255,.12);color:var(--text)}.pc-btn-o:hover{border-color:rgba(255,255,255,.28);transform:translateY(-2px)}
-.pc-btn-g{background:var(--gd);color:#050608;box-shadow:0 4px 18px rgba(201,168,76,.28)}.pc-btn-g:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(201,168,76,.42)}
-
-/* CONTACT */
-#contact{padding:120px 0 100px;background:var(--bg1)}
+/* ── CONTACT ── */
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
-.contact-detail{display:flex;align-items:flex-start;gap:16px;padding:22px 0;border-bottom:1px solid var(--brd)}
-.contact-detail:first-of-type{border-top:1px solid var(--brd);margin-top:36px}
-.cd-ico{width:42px;height:42px;border-radius:10px;flex-shrink:0;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.14);display:flex;align-items:center;justify-content:center;font-size:17px}
-.cd-lbl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
-.cd-val{font-size:15px;font-weight:500;color:var(--text)}
-.cd-val a:hover{color:var(--gold)}
-.contact-form{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rxl);padding:42px 40px;position:relative;overflow:hidden}
-.contact-form::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(201,168,76,.07),transparent 70%);filter:blur(40px);border-radius:50%;pointer-events:none}
-.cf-title{font-family:var(--fh);font-size:30px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
-.cf-sub{font-size:14px;color:var(--t2);font-weight:300;margin-bottom:28px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.form-field{margin-bottom:16px}
-.form-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:7px}
-.form-field input,.form-field textarea,.form-field select{width:100%;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);color:var(--text);font-size:14px;font-weight:400;padding:12px 16px;transition:border-color .2s,background .2s;outline:none;-webkit-appearance:none;appearance:none}
-.form-field input::placeholder,.form-field textarea::placeholder{color:var(--t3)}
-.form-field input:focus,.form-field textarea:focus,.form-field select:focus{border-color:rgba(201,168,76,.4);background:var(--bg4)}
-.form-field textarea{resize:vertical;min-height:110px}
-.form-field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238899b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
-.form-field select option{background:var(--bg3);color:var(--text)}
-.form-submit{width:100%;padding:14px;background:var(--gd);color:#050608;font-size:15px;font-weight:700;letter-spacing:.02em;border-radius:40px;box-shadow:0 4px 18px rgba(201,168,76,.28);transition:transform .2s,box-shadow .2s;margin-top:6px;cursor:pointer}
-.form-submit:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.42)}
-.form-note{font-size:12px;color:var(--t3);text-align:center;margin-top:12px;font-weight:300}
-.form-error{font-size:12px;color:#ef4444;margin-top:5px;display:none}
-.field-err input,.field-err textarea,.field-err select{border-color:rgba(239,68,68,.5)}
-.field-err .form-error{display:block}
-.form-success{display:none;text-align:center;padding:28px 0}
-.form-success-icon{font-size:48px;margin-bottom:12px}
-.form-success-h{font-family:var(--fh);font-size:26px;font-weight:700;margin-bottom:8px}
-.form-success-p{font-size:14px;color:var(--t2);font-weight:300}
+.cinfo{}
+.ci-detail{display:flex;gap:13px;padding:16px 0;border-bottom:1px solid var(--brd);align-items:flex-start}
+.ci-detail:first-of-type{border-top:1px solid var(--brd);margin-top:24px}
+.ci-ico{width:36px;height:36px;background:var(--bg);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:1px solid var(--brd)}
+.ci-lbl{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:2px}
+.ci-val{font-size:14px;font-weight:500}.ci-val a:hover{color:var(--or)}
+.cform{background:var(--bg);border:1px solid var(--brd);border-radius:18px;padding:32px}
+.cf-h{font-family:var(--fh);font-size:24px;font-weight:700;letter-spacing:-.03em;margin-bottom:4px}
+.cf-s{font-size:13.5px;color:var(--t1);font-weight:300;margin-bottom:22px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ff{margin-bottom:12px}
+.ff label{display:block;font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:5px}
+.ff input,.ff textarea,.ff select{width:100%;background:#fff;border:1px solid var(--brd);border-radius:9px;color:var(--ink);font-size:13.5px;padding:10px 13px;transition:border-color .2s;outline:none;-webkit-appearance:none;appearance:none}
+.ff input::placeholder,.ff textarea::placeholder{color:#bbb}
+.ff input:focus,.ff textarea:focus,.ff select:focus{border-color:var(--or)}
+.ff textarea{resize:vertical;min-height:90px}
+.ff select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.ff.err input,.ff.err textarea{border-color:#fca5a5}
+.ff-e{font-size:11px;color:#dc2626;margin-top:3px;display:none}
+.ff.err .ff-e{display:block}
+.fsub{width:100%;padding:12px;background:var(--ink);color:#fff;font-size:14px;font-weight:500;border-radius:40px;cursor:pointer;transition:opacity .2s,transform .2s;margin-top:4px}
+.fsub:hover{opacity:.85;transform:translateY(-1px)}
+.fnote{font-size:11px;color:var(--t2);text-align:center;margin-top:8px;font-weight:300}
+.fok{display:none;text-align:center;padding:20px}
+.fok-ico{font-size:40px;margin-bottom:8px}
+.fok-h{font-family:var(--fh);font-size:22px;font-weight:700;margin-bottom:5px}
+.fok-p{font-size:13.5px;color:var(--t1);font-weight:300}
 
-/* FAQ */
-#faq{padding:100px 0}
-.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
-.faq-list{display:flex;flex-direction:column}
-.faq-item{border-bottom:1px solid var(--brd)}
-.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 0;text-align:left;font-size:15px;font-weight:500;color:var(--text);gap:16px;cursor:pointer;transition:color .2s}
-.faq-q:hover{color:var(--gold)}
-.faq-icon{width:24px;height:24px;border-radius:50%;flex-shrink:0;background:var(--bg3);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t2);transition:transform .3s,background .2s,border-color .2s}
-.faq-item.open .faq-icon{transform:rotate(45deg);background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.25);color:var(--gold)}
-.faq-a{font-size:14px;color:var(--t2);font-weight:300;line-height:1.78;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.22,1,.36,1),padding .35s;padding:0}
-.faq-item.open .faq-a{max-height:200px;padding:0 0 20px}
+/* ── FAQ ── */
+.faq-grid{display:grid;grid-template-columns:5fr 7fr;gap:80px;align-items:start}
+.faq-list{margin-top:8px}
+.fi{border-bottom:1px solid var(--brd)}
+.fi:first-child{border-top:1px solid var(--brd)}
+.fiq{width:100%;display:flex;justify-content:space-between;align-items:center;padding:15px 0;font-size:14.5px;font-weight:500;color:var(--ink);gap:12px;cursor:pointer;text-align:left;transition:color .2s}
+.fiq:hover{color:var(--or)}
+.fi-ico{width:20px;height:20px;border-radius:50%;background:var(--bg);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t2);flex-shrink:0;transition:transform .3s,background .2s,color .2s}
+.fi.open .fi-ico{transform:rotate(45deg);background:rgba(232,96,26,.1);color:var(--or)}
+.fia{font-size:13.5px;color:var(--t1);font-weight:300;line-height:1.78;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s}
+.fi.open .fia{max-height:200px;padding:0 0 14px}
 
-/* CTA */
-#cta-band{padding:80px 0 100px}
-.cta-box{background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.16);border-radius:var(--rxl);padding:72px 60px;text-align:center;position:relative;overflow:hidden}
-.cta-box::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(201,168,76,.1),transparent 70%);filter:blur(60px);pointer-events:none}
-.cta-h{font-family:var(--fh);font-size:clamp(36px,5vw,62px);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:14px;position:relative}
-.cta-h em{font-style:italic;font-weight:400;color:var(--gold)}
-.cta-p{color:var(--t2);font-size:18px;font-weight:300;margin-bottom:40px;position:relative}
-.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
-.cta-note{font-size:12px;color:var(--t3);margin-top:18px;position:relative}
+/* ── CTA ── */
+#cta{background:var(--ink);padding:80px 0}
+.cta-inner{text-align:center}
+.cta-h{font-family:var(--fh);font-size:clamp(32px,5vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.04;color:#fff;margin-bottom:12px}
+.cta-h em{font-style:normal;color:var(--or)}
+.cta-p{font-size:16px;color:rgba(255,255,255,.45);font-weight:300;margin-bottom:30px}
+.cta-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cta-note{font-size:11.5px;color:rgba(255,255,255,.25);margin-top:14px}
 
-/* FOOTER */
-footer{background:var(--bg1);border-top:1px solid var(--brd);padding:56px 0 28px}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:44px}
-.footer-brand-desc{font-size:14px;color:var(--t3);font-weight:300;margin-top:14px;max-width:250px;line-height:1.78}
-.footer-col h4{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:16px}
-.footer-links{display:flex;flex-direction:column;gap:9px}
-.footer-links a{font-size:14px;color:var(--t2);font-weight:300;transition:color .2s}
-.footer-links a:hover{color:var(--text)}
-.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--brd);flex-wrap:wrap;gap:12px}
-.footer-copy{font-size:13px;color:var(--t3);font-weight:300}
-.footer-badges{display:flex;align-items:center;gap:10px}
-.footer-badge{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--t3);padding:4px 10px;border:1px solid var(--brd);border-radius:6px}
+/* ── FOOTER ── */
+footer{background:#0d0f13;padding:48px 0 24px}
+.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:36px}
+.ft-logo{display:flex;align-items:center;gap:9px;font-family:var(--fh);font-size:17px;font-weight:800;color:#fff;margin-bottom:9px}
+.ft-logo-dot{width:20px;height:20px;border-radius:50%;background:var(--or);flex-shrink:0}
+.ft-logo em{color:var(--or);font-style:normal}
+.ft-desc{font-size:13px;color:rgba(255,255,255,.3);font-weight:300;max-width:220px;line-height:1.75}
+.ftc h4{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:12px}
+.ftl{display:flex;flex-direction:column;gap:7px}
+.ftl a{font-size:13.5px;font-weight:300;color:rgba(255,255,255,.38);transition:color .2s}
+.ftl a:hover{color:rgba(255,255,255,.8)}
+.ft-bot{display:flex;align-items:center;justify-content:space-between;padding-top:20px;border-top:1px solid rgba(255,255,255,.07);flex-wrap:wrap;gap:8px}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.22);font-weight:300}
+.ft-tags{display:flex;gap:6px}
+.ft-tag{font-size:10px;padding:3px 9px;border:1px solid rgba(255,255,255,.1);border-radius:5px;color:rgba(255,255,255,.22)}
 
-/* RESPONSIVE */
-@media(max-width:960px){
-  .container{padding:0 24px}
-  #nav .nav-links,.nav-tel{display:none}
-  .demo-layout{grid-template-columns:1fr}
-  .demo-sky{border-right:none;border-bottom:1px solid var(--brd)}
-  .feat-layout{grid-template-columns:1fr}
-  .feat-card:nth-child(1),.feat-card:nth-child(2),.feat-card:nth-child(5),.feat-card:nth-child(6){border-radius:0}
-  .feat-card:first-child{border-radius:var(--rxl) var(--rxl) 0 0}
-  .feat-card:last-child{border-radius:0 0 var(--rxl) var(--rxl)}
-  .how-grid,.contact-grid,.faq-grid{grid-template-columns:1fr}
-  .num-grid{grid-template-columns:repeat(2,1fr)}
-  .price-grid,.test-grid{grid-template-columns:1fr}
-  .footer-top{grid-template-columns:1fr 1fr}
-  .hero-live{width:100%}
-  .hl-cell{flex:1;padding:18px 20px;border-right:none;border-bottom:1px solid var(--brd)}
-  .hl-cell:last-child{border-bottom:none}
-  .form-row{grid-template-columns:1fr}
-  .cta-box{padding:48px 28px}
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .wrap{padding:0 20px}
+  nav .nav-links,.n-tel{display:none}
+  .hero-inner,.about-grid,.how-grid,.contact-grid,.faq-grid{grid-template-columns:1fr}
+  #hero{padding:80px 0 40px}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .demo-body{grid-template-columns:1fr}
+  .demo-ctrl{border-top:1px solid rgba(255,255,255,.05)}
+  .price-grid{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .frow{grid-template-columns:1fr}
 }
-@media(max-width:480px){
-  #nav{padding:16px 0}
-  #nav.scrolled{padding:10px 0}
-  .num-grid{grid-template-columns:1fr 1fr}
-  .hero-h1{font-size:clamp(44px,12vw,72px)}
+@media(max-width:560px){
+  .hero-h1{font-size:42px}
+  .feat-grid{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr}
+}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.52);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:#fff;border-radius:20px;max-width:680px;width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 32px 80px rgba(0,0,0,.18);border:1px solid var(--brd);transform:translateY(16px);transition:transform .3s}
+.modal-overlay.open .modal-box{transform:none}
+.modal-hd{display:flex;align-items:flex-start;justify-content:space-between;padding:28px 30px 20px;border-bottom:1px solid var(--brd);gap:16px;flex-shrink:0}
+.modal-tag{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--or);margin-bottom:5px}
+.modal-h{font-family:var(--fh);font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.modal-sub{font-size:12px;color:var(--t2);font-weight:300;margin-top:3px}
+.modal-close{width:32px;height:32px;border-radius:50%;background:var(--bg);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t1);flex-shrink:0;cursor:pointer;transition:background .2s,color .2s}
+.modal-close:hover{background:#e8e4de;color:var(--ink)}
+.modal-body{padding:24px 30px;overflow-y:auto;flex:1}
+.mlead{font-size:15px;color:var(--t1);font-weight:300;line-height:1.8;margin-bottom:22px;padding-bottom:20px;border-bottom:1px solid var(--brd)}
+.msec-h{font-family:var(--fh);font-size:16px;font-weight:700;letter-spacing:-.02em;margin:22px 0 8px;color:var(--ink)}
+.msec-p{font-size:14px;color:var(--t1);font-weight:300;line-height:1.78;margin-bottom:10px}
+.mlist{display:flex;flex-direction:column;gap:6px;margin:8px 0 12px;padding-left:0}
+.mlist li{font-size:14px;color:var(--t1);font-weight:300;line-height:1.7;display:flex;gap:8px;align-items:flex-start}
+.mlist li::before{content:'·';color:var(--or);font-weight:700;flex-shrink:0;margin-top:1px}
+.modal-ft{display:flex;align-items:center;justify-content:space-between;padding:16px 30px;border-top:1px solid var(--brd);flex-shrink:0;background:var(--bg);border-radius:0 0 20px 20px;gap:12px;flex-wrap:wrap}
+.modal-ft-note{font-size:12.5px;color:var(--t2);font-weight:300}
+.modal-ft-btn{background:var(--ink);color:#fff;font-size:13px;font-weight:500;padding:9px 22px;border-radius:40px;transition:opacity .2s}
+.modal-ft-btn:hover{opacity:.82}
+
+/* Cookie table */
+.cookie-table{border:1px solid var(--brd);border-radius:10px;overflow:hidden;margin:10px 0 16px;font-size:12.5px}
+.ct-row{display:grid;grid-template-columns:1.4fr 1fr 2.2fr 1fr;padding:9px 12px;gap:8px;border-bottom:1px solid var(--brd)}
+.ct-row:last-child{border-bottom:none}
+.ct-head{background:var(--bg);font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--t2)}
+.ct-row span{color:var(--t1);font-weight:300;line-height:1.5;word-break:break-all}
+.ct-row code{font-family:monospace;font-size:11px;background:rgba(0,0,0,.05);padding:1px 5px;border-radius:4px}
+
+/* GDPR grid */
+.gdpr-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0 22px}
+.gdpr-card{background:var(--bg);border:1px solid var(--brd);border-radius:12px;padding:16px 14px}
+.gdpr-ico{font-size:22px;margin-bottom:8px}
+.gdpr-card-h{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:-.02em;margin-bottom:5px}
+.gdpr-card-p{font-size:12.5px;color:var(--t1);font-weight:300;line-height:1.65}
+
+/* ── COOKIE BANNER ── */
+#cookieBanner{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);z-index:998;background:#fff;border:1px solid var(--brd);border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.12);padding:16px 20px;max-width:680px;width:calc(100% - 32px);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s}
+#cookieBanner.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all}
+.cb-inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.cb-ico{font-size:26px;flex-shrink:0}
+.cb-left{display:flex;align-items:center;gap:14px;flex:1;min-width:260px}
+.cb-h{font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:-.02em;margin-bottom:3px}
+.cb-p{font-size:12.5px;color:var(--t1);font-weight:300;line-height:1.6}
+.cb-link{background:none;border:none;color:var(--or);font-size:12.5px;font-weight:500;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:0;font-family:'DM Sans',sans-serif}
+.cb-acts{display:flex;gap:8px;flex-shrink:0}
+.cb-ess{font-size:13px;font-weight:500;padding:9px 18px;border-radius:40px;border:1px solid var(--brd);color:var(--t1);transition:border-color .2s,background .2s}
+.cb-ess:hover{border-color:#999;background:var(--bg)}
+.cb-all{font-size:13px;font-weight:500;padding:9px 18px;border-radius:40px;background:var(--or);color:#fff;box-shadow:0 4px 14px rgba(232,96,26,.25);transition:opacity .2s}
+.cb-all:hover{opacity:.88}
+
+@media(max-width:600px){
+  .modal-hd,.modal-body,.modal-ft{padding-left:20px;padding-right:20px}
+  .gdpr-grid{grid-template-columns:1fr 1fr}
+  .ct-row{grid-template-columns:1fr 1fr;font-size:11px}
+  .ct-row span:nth-child(3),.ct-head span:nth-child(3){grid-column:1/-1}
+  .cb-inner{gap:12px}
+  .cb-acts{width:100%}
+  .cb-ess,.cb-all{flex:1;text-align:center}
 }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav id="nav">
-  <div class="container">
-    <div class="nav-inner">
-      <a class="nav-logo" href="#hero">
-        <span class="nav-sun"></span>
-        Eko<span>Slnko</span>
-      </a>
+  <div class="wrap">
+    <div class="nav-i">
+      <a class="logo" href="#hero"><span class="logo-dot"></span>Eko<span>Slnko</span></a>
       <div class="nav-links">
-        <a href="#demo">Live Demo</a>
+        <a href="#demo">Demo</a>
+        <a href="#about">About</a>
         <a href="#features">Features</a>
-        <a href="#how">How It Works</a>
         <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </div>
-      <div class="nav-right">
-        <a class="nav-tel" href="tel:+421900000000">+421 900 000 000</a>
-        <a class="nav-cta" href="#contact">Request a Demo</a>
-      </div>
+      <a class="nav-btn" href="#contact">Get in touch</a>
     </div>
   </div>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-glow"><div class="g1"></div><div class="g2"></div><div class="g3"></div></div>
-  <div style="position:relative;z-index:2;width:100%;max-width:1100px;margin:0 auto">
-    <div class="hero-tag tag"><span class="tag-dot"></span>Solar Intelligence Platform</div>
-    <h1 class="hero-h1">Every watt your roof<br>produces, <span class="it">tracked.</span></h1>
-    <p class="hero-lead">Real-time monitoring, AI-powered yield forecasting, and precise savings tracking — built for Central European homeowners who invested in solar and want to see every euro it earns.</p>
-    <div class="hero-actions">
-      <a href="#demo" class="btn-gold">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        See It Live
-      </a>
-      <a href="#contact" class="btn-outline">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><polyline points="3,8 12,13 21,8"/></svg>
-        Book a Consultation
-      </a>
-    </div>
-    <div class="hero-live">
-      <div class="hl-cell"><span class="hl-n counter" data-to="1247" data-dur="2200">0</span><span class="hl-l">Installations</span></div>
-      <div class="hl-cell"><span class="hl-n counter" data-to="4.8" data-dec="1" data-dur="1800">0</span><span class="hl-l">Avg kWh / Day</span></div>
-      <div class="hl-cell"><span class="hl-n counter" data-prefix="€" data-to="312" data-dur="2000">0</span><span class="hl-l">Avg Annual Savings</span></div>
-      <div class="hl-cell"><span class="hl-n counter" data-to="99.7" data-dec="1" data-suffix="%" data-dur="1600">0</span><span class="hl-l">Platform Uptime</span></div>
+  <div class="wrap">
+    <div class="hero-inner">
+      <div>
+        <p class="hero-label">Solar Monitoring · Slovakia · Founded 2026</p>
+        <h1 class="hero-h1">Know what your<br>panels <span>produce.</span></h1>
+        <p class="hero-p">Real-time solar monitoring, AI forecasting, and precise savings tracking — built for homeowners in Central Europe who want to understand their investment.</p>
+        <div class="hero-acts">
+          <a href="#demo" class="btn-solid">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            See Live Demo
+          </a>
+          <a href="#about" class="btn-out">Our Story</a>
+        </div>
+        <div class="hero-team">
+          <div class="h-avs">
+            <div class="h-av" style="background:#e8601a">N</div>
+            <div class="h-av" style="background:#16a34a">G</div>
+            <div class="h-av" style="background:#2563eb">J</div>
+          </div>
+          <p>Made by <strong>3 engineers</strong> who got frustrated with bad solar tools</p>
+        </div>
+      </div>
+      <!-- Hero card -->
+      <div style="position:relative;padding:16px 10px 10px">
+        <div class="hero-card">
+          <div class="hc-bar">
+            <div class="hc-dots"><div class="hcd"></div><div class="hcd"></div><div class="hcd"></div></div>
+            <div class="hc-bar-lbl">support.ekoslnko.lol</div>
+            <div class="hc-live"><div class="hc-ldot"></div>LIVE</div>
+          </div>
+          <div class="hc-body">
+            <div class="hc-big">
+              <div class="hc-big-lbl">Current Output</div>
+              <span class="hc-big-n" id="hc-pow">4.32</span>
+              <div class="hc-big-u">kilowatts</div>
+            </div>
+            <div class="hc-kpis">
+              <div class="hck"><div class="hck-l">Today</div><div class="hck-v" id="hc-kwh" style="color:#3b82f6">18.4</div><div class="hck-u">kWh</div></div>
+              <div class="hck"><div class="hck-l">Monthly</div><div class="hck-v" id="hc-sav" style="color:#16a34a">€48</div><div class="hck-u">saving</div></div>
+              <div class="hck"><div class="hck-l">CO₂</div><div class="hck-v" id="hc-co2" style="color:#8b5cf6">212</div><div class="hck-u">kg saved</div></div>
+            </div>
+            <div style="margin-top:10px">
+              <div class="hc-chart-lbl">Today's Production</div>
+              <canvas id="hcChart"></canvas>
+            </div>
+            <div class="hc-status">
+              <div class="hc-st ok"><div class="hc-st-l">Status</div>● All panels OK</div>
+              <div class="hc-st fc"><div class="hc-st-l">Tomorrow</div>☀ 22.1 kWh</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee-strip"><div class="marquee-track" id="mtrack"></div></div>
-
-<!-- LIVE DEMO -->
-<section id="demo">
-  <div class="container">
-    <div class="demo-head reveal">
-      <div class="tag"><span class="tag-dot"></span>Interactive Demo</div>
-      <h2 class="sec-title">A live window into<br>your solar system</h2>
-      <p class="sec-sub" style="margin:14px auto 0">Drag the sliders. The sky, solar physics, and every number are real — no backend required.</p>
-    </div>
-    <div class="demo-shell reveal d1">
-      <div class="demo-bar">
-        <div class="db-dots"><div class="db-dot"></div><div class="db-dot"></div><div class="db-dot"></div></div>
-        <div class="db-url">app.ekoslnko.sk — Dashboard</div>
-        <div class="db-live"><div class="db-live-dot"></div>Live</div>
-      </div>
-      <div class="demo-layout">
-        <div class="demo-sky">
-          <canvas id="skyCanvas"></canvas>
-          <div class="demo-panels">
-            <div class="dp-lbl" id="dpLbl">Solar Array — 16 Panels</div>
-            <div class="panel-grid" id="panelGrid"></div>
-          </div>
+<!-- ABOUT -->
+<section id="about" class="sec">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="sec-tag">Who we are</p>
+        <h2 class="sec-h">Three friends,<br>one <em>problem.</em></h2>
+        <blockquote class="about-quote">"We installed solar panels, got a spreadsheet from the installer, and realised there was no good way to actually understand what our system was doing."</blockquote>
+        <p class="about-p">EkoSlnko was founded in Banská Bystrica in 2026. We're three engineers — electrical, software, and network engineering — who built the monitoring tool we wished we had from day one.</p>
+        <p class="about-p">We're early-stage and intentionally small. We serve 0 installations across Slovakia, Czech Republic, Austria, Poldand and Hungary.</p>
+        <div class="about-meta">
+          <div class="meta-pill"><strong>2026</strong><span>Founded in<br>Banská Bystrica</span></div>
+          <div class="meta-pill"><strong>0</strong><span>Installations<br>monitored</span></div>
+          <div class="meta-pill"><strong>5</strong><span>Countries in<br>Central Europe</span></div>
         </div>
-        <div class="demo-ctrl">
-          <div class="dc-sliders">
-            <div class="dc-sec">Simulation Controls</div>
+      </div>
+      <div class="reveal d1">
+        <div class="team-cards">
+          <div class="tm">
+            <div class="tm-av" style="background:linear-gradient(135deg,#e8601a,#f07840)">N</div>
             <div>
-              <div class="dc-row-top"><span class="dc-name">Time of Day</span><span class="dc-val" id="vTime">12:00</span></div>
-              <input type="range" id="sl-time" min="0" max="1440" value="720" step="15">
+              <div class="tm-name">Nikolas Ušák</div>
+              <div class="tm-role">Lead Software Engineer & Co-founder · Software systems & dashboards</div>
             </div>
-            <div>
-              <div class="dc-row-top"><span class="dc-name">Cloud Cover</span><span class="dc-val" id="vCloud">0%</span></div>
-              <input type="range" id="sl-cloud" min="0" max="100" value="0">
-            </div>
-            <div>
-              <div class="dc-row-top"><span class="dc-name">Panel Count</span><span class="dc-val" id="vPanels">16</span></div>
-              <input type="range" id="sl-panels" min="4" max="40" value="16" step="2">
-            </div>
+            <div class="tm-tag" style="background:#fff5ed;color:var(--or);border:1px solid #fed7aa">Engineering</div>
           </div>
-          <div class="dc-kpis">
-            <div class="kpi kp"><div class="kpi-lbl">Output</div><div class="kpi-num" id="kOutput">4.32</div><div class="kpi-unit">kilowatts now</div></div>
-            <div class="kpi kk"><div class="kpi-lbl">Today</div><div class="kpi-num" id="kKwh">18.4</div><div class="kpi-unit">kWh accumulated</div></div>
-            <div class="kpi ks"><div class="kpi-lbl">Monthly</div><div class="kpi-num" id="kSave">€48</div><div class="kpi-unit">estimated saving</div></div>
-            <div class="kpi kc"><div class="kpi-lbl">CO₂ Offset</div><div class="kpi-num" id="kCo2">212</div><div class="kpi-unit">kg per year</div></div>
+          <div class="tm">
+            <div class="tm-av" style="background:linear-gradient(135deg,#16a34a,#22c55e)">G</div>
+            <div>
+              <div class="tm-name">Gergő Szabó</div>
+              <div class="tm-role">Electrical Engineer & Co-founder · PV systems & hardware integration</div>
+            </div>
+            <div class="tm-tag" style="background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0">Product</div>
           </div>
-          <div class="dc-chart">
-            <div class="dc-chart-lbl">Today's Production Curve</div>
-            <canvas id="miniChart"></canvas>
+          <div class="tm">
+            <div class="tm-av" style="background:linear-gradient(135deg,#2563eb,#3b82f6)">J</div>
+            <div>
+              <div class="tm-name">Ján Olbert</div>
+              <div class="tm-role">Network & Systems Engineer & Co-founder · Connectivity and cloud operations</div>
+            </div>
+            <div class="tm-tag" style="background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe">Infrastructure</div>
           </div>
         </div>
       </div>
@@ -449,296 +489,259 @@ footer{background:var(--bg1);border-top:1px solid var(--brd);padding:56px 0 28px
 </section>
 
 <!-- FEATURES -->
-<section id="features">
-  <div class="container">
-    <div style="margin-bottom:56px" class="reveal">
-      <div class="tag"><span class="tag-dot"></span>Platform Features</div>
-      <h2 class="sec-title">Everything your solar<br>investment <em>deserves</em></h2>
+<section id="features" class="sec sec-alt">
+  <div class="wrap">
+    <div class="feat-head reveal">
+      <p class="sec-tag">Features</p>
+      <h2 class="sec-h">Everything you need<br>to know your <em>system.</em></h2>
+      <p class="sec-p">Built for homeowners, not engineers. Every number explained, every alert actionable.</p>
     </div>
-    <div class="feat-layout reveal d1">
-      <div class="feat-card">
-        <div class="feat-ico">☀️</div>
-        <div class="feat-h">Real-Time Monitoring</div>
-        <p class="feat-p">Live watt-by-watt output tracking across every panel in your array. Spot underperformers in seconds, not weeks. Dashboard refreshes every 4 seconds.</p>
-        <div class="feat-link">Panel-level data →</div>
+    <div class="feat-grid reveal d1">
+      <div class="fcard">
+        <div class="fcard-ico">⚡</div>
+        <div class="fcard-h">Live every 4 seconds</div>
+        <p class="fcard-p">Most platforms update once a day. We stream data every 4 seconds so you catch faults in minutes, not weeks.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-ico">🧠</div>
-        <div class="feat-h">AI Yield Forecasting</div>
-        <p class="feat-p">Our model blends local weather data, historical output, and seasonal solar curves to predict tomorrow's harvest with 94% accuracy over a 48-hour window.</p>
-        <div class="feat-link">48-hour forecast →</div>
+      <div class="fcard">
+        <div class="fcard-ico">🧠</div>
+        <div class="fcard-h">AI Yield Forecasting</div>
+        <p class="fcard-p">48-hour production forecast using ECMWF weather data. Learns your specific panels and orientation. 94% accuracy after 30 days.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-ico">💶</div>
-        <div class="feat-h">Precise Savings Tracking</div>
-        <p class="feat-p">Enter your energy tariff once. Get exact euro savings, your break-even date, and projected 10-year ROI — updated every single day.</p>
-        <div class="feat-link">Full financial model →</div>
+      <div class="fcard">
+        <div class="fcard-ico">💶</div>
+        <div class="fcard-h">Real Euro Savings</div>
+        <p class="fcard-p">Enter your tariff once. Get exact daily, monthly, and annual savings — not generic estimates. Real numbers from your real data.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-ico">🔔</div>
-        <div class="feat-h">Intelligent Fault Alerts</div>
-        <p class="feat-p">Instant push and email alerts the moment a panel drops below its efficiency threshold. Catch silent failures before they cost you money.</p>
-        <div class="feat-link">Configurable thresholds →</div>
+      <div class="fcard">
+        <div class="fcard-ico">🔔</div>
+        <div class="fcard-h">Instant Fault Alerts</div>
+        <p class="fcard-p">Push and email alerts the moment a panel drops below threshold. Silent degradation costs money — we stop it early.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-ico">📊</div>
-        <div class="feat-h">Deep Analytics</div>
-        <p class="feat-p">Month-over-month trends, weather correlation analysis, and shareable PDF reports — everything your installer and accountant need.</p>
-        <div class="feat-link">Export your data →</div>
+      <div class="fcard">
+        <div class="fcard-ico">📊</div>
+        <div class="fcard-h">Full Analytics</div>
+        <p class="fcard-p">Monthly trends, weather correlation, CSV and PDF exports. Everything your installer or accountant needs.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-ico">🔌</div>
-        <div class="feat-h">Universal Compatibility</div>
-        <p class="feat-p">Works with Solaredge, Fronius, Huawei, SMA, Growatt and 40+ other inverter brands. One hardware bridge handles them all.</p>
-        <div class="feat-link">See compatible devices →</div>
+      <div class="fcard">
+        <div class="fcard-ico">🔌</div>
+        <div class="fcard-h">42 Inverter Brands</div>
+        <p class="fcard-p">Works with Solaredge, Fronius, Huawei, SMA, Growatt, Goodwe, Solis and 35 more. One hardware bridge covers them all.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section id="demo" class="sec">
+  <div class="wrap">
+    <div class="demo-head reveal">
+      <p class="sec-tag">Interactive Demo</p>
+      <h2 class="sec-h">The real dashboard — <em>live.</em></h2>
+      <p class="sec-p" style="margin:0 auto">Drag the sliders and watch real solar physics. Sky, panels, and all numbers update in real time.</p>
+    </div>
+    <div class="dshell reveal d1">
+      <div class="dbar">
+        <div class="ddots"><div class="dd"></div><div class="dd"></div><div class="dd"></div></div>
+        <div class="durl">app.ekoslnko.sk — Dashboard</div>
+        <div class="dlive"><div class="dldot"></div>LIVE</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-sky-wrap">
+          <canvas id="skyC"></canvas>
+          <div class="demo-panels">
+            <div class="dp-lbl" id="dpLbl">Solar Array — 16 Panels</div>
+            <div class="pgrid" id="panelGrid"></div>
+          </div>
+        </div>
+        <div class="demo-ctrl">
+          <div class="dc-lbl">Simulation Controls</div>
+          <div class="dc-sl">
+            <div class="dc-sl-top"><span class="dc-sl-name">Time of Day</span><span class="dc-sl-val" id="vTime">12:00</span></div>
+            <input type="range" id="sl-time" min="0" max="1440" value="720" step="15">
+          </div>
+          <div class="dc-sl">
+            <div class="dc-sl-top"><span class="dc-sl-name">Cloud Cover</span><span class="dc-sl-val" id="vCloud">0%</span></div>
+            <input type="range" id="sl-cloud" min="0" max="100" value="0">
+          </div>
+          <div class="dc-sl">
+            <div class="dc-sl-top"><span class="dc-sl-name">Panel Count</span><span class="dc-sl-val" id="vPanels">16</span></div>
+            <input type="range" id="sl-panels" min="4" max="40" value="16" step="2">
+          </div>
+          <div class="dc-kpis">
+            <div class="dkpi"><span class="dkpi-l">Output</span><span class="dkpi-v" id="kOut" style="color:#f07840">4.32 kW</span></div>
+            <div class="dkpi"><span class="dkpi-l">Today</span><span class="dkpi-v" id="kKwh" style="color:#60a5fa">18.4 kWh</span></div>
+            <div class="dkpi"><span class="dkpi-l">Monthly</span><span class="dkpi-v" id="kSav" style="color:#4ade80">€48</span></div>
+          </div>
+          <div class="dc-chart">
+            <div class="dc-chart-l">Production Curve</div>
+            <canvas id="miniC"></canvas>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
-<section id="how">
-  <div class="container">
+<section id="how" class="sec sec-alt">
+  <div class="wrap">
     <div class="how-grid">
       <div class="reveal">
-        <div class="tag"><span class="tag-dot"></span>How It Works</div>
-        <h2 class="sec-title" style="margin:14px 0 36px">Running in under<br><em>fifteen minutes</em></h2>
-        <div class="steps-list">
+        <p class="sec-tag">How it works</p>
+        <h2 class="sec-h">Live in under<br><em>15 minutes.</em></h2>
+        <div class="steps">
           <div class="step">
             <div class="step-n">01</div>
             <div>
-              <div class="step-h">Plug in the EkoSlnko Bridge</div>
-              <p class="step-p">Our compact device connects to your inverter's RS485 or local WiFi port. No rewiring. No electrician. Just plug it in and it pairs automatically.</p>
+              <div class="step-h">Order the Bridge (€49)</div>
+              <p class="step-p">Compact hardware that plugs into your inverter's RS485 port or WiFi. Ships in 3 days. No electrician needed.</p>
             </div>
           </div>
           <div class="step">
             <div class="step-n">02</div>
             <div>
-              <div class="step-h">Configure your installation</div>
-              <p class="step-p">Scan the QR code on the device, enter your panel count and energy tariff. The dashboard goes live in under two minutes.</p>
+              <div class="step-h">Plug in and configure</div>
+              <p class="step-p">Scan the QR code, enter your panel count and energy tariff. Under 15 minutes total setup time.</p>
             </div>
           </div>
           <div class="step">
             <div class="step-n">03</div>
             <div>
-              <div class="step-h">Watch your data — forever</div>
-              <p class="step-p">Real-time output, daily forecasts, savings totals, and intelligent alerts on your phone and browser, 24 hours a day.</p>
+              <div class="step-h">Dashboard goes live</div>
+              <p class="step-p">Real data flows in within 2 minutes. Updates every 4 seconds from that point, forever.</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="how-visual reveal d2">
-        <div class="hv-mock">
-          <div class="hv-bar"><div class="hv-dot"></div><div class="hv-dot"></div><div class="hv-dot"></div></div>
-          <div class="hv-body">
-            <div class="hv-row"><span class="hv-lbl">Current Output</span><span class="hv-val" style="color:var(--gold)">4.32 kW</span></div>
-            <div class="hv-bar-w"><div class="hv-bar-f" style="--w:72%;background:var(--gd)"></div></div>
-            <div class="hv-row"><span class="hv-lbl">Today's Yield</span><span class="hv-val" style="color:var(--blue)">18.4 kWh</span></div>
-            <div class="hv-bar-w"><div class="hv-bar-f" style="--w:61%;background:linear-gradient(90deg,var(--blue),#7ec8f5)"></div></div>
-            <div class="hv-row"><span class="hv-lbl">Monthly Savings</span><span class="hv-val" style="color:var(--green)">€ 48.20</span></div>
-            <div class="hv-bar-w"><div class="hv-bar-f" style="--w:48%;background:linear-gradient(90deg,var(--green),#6ee7b7)"></div></div>
-            <div class="hv-chips">
-              <div class="hv-chip cg"><div class="hv-chip-lbl">Status</div><div>● All Systems OK</div></div>
-              <div class="hv-chip cb"><div class="hv-chip-lbl">Tomorrow</div><div>☀ 22.1 kWh</div></div>
-            </div>
-          </div>
+      <div class="how-right reveal d1">
+        <div class="compat-lbl">42 Compatible Inverter Brands</div>
+        <div class="brands">
+          <span class="brand">Solaredge</span><span class="brand">Fronius</span><span class="brand">Huawei</span>
+          <span class="brand">SMA</span><span class="brand">Growatt</span><span class="brand">Goodwe</span>
+          <span class="brand">Solis</span><span class="brand">Deye</span><span class="brand">Sofar</span>
+          <span class="brand">Sungrow</span><span class="brand more">+ 32 more</span>
         </div>
-        <p style="text-align:center;margin-top:20px;font-size:12px;color:var(--t3);font-weight:300">Dashboard refreshes every 4 seconds</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="container">
-    <div style="text-align:center;margin-bottom:56px" class="reveal">
-      <div class="tag"><span class="tag-dot"></span>Customer Stories</div>
-      <h2 class="sec-title">Trusted by homeowners<br>across <em>Slovakia</em></h2>
-    </div>
-    <div class="test-grid">
-      <div class="test-card reveal">
-        <div class="test-saving">€ 380 saved</div>
-        <div class="test-stars">★★★★★</div>
-        <p class="test-q">"I discovered one panel had been underperforming for three months. EkoSlnko caught it immediately. We fixed it the next day and haven't missed a watt since."</p>
-        <div class="test-author">
-          <div class="test-av" style="background:var(--gd)">M</div>
-          <div><div class="test-name">Martin Kováč</div><div class="test-role">10 panels · Bratislava</div></div>
+        <div class="how-note">
+          <strong>Not sure if your inverter is compatible?</strong><br>
+          Send us the model number via the contact form — we'll confirm before you order anything.
         </div>
       </div>
-      <div class="test-card reveal d1">
-        <div class="test-saving">€ 512 saved</div>
-        <div class="test-stars">★★★★★</div>
-        <p class="test-q">"Setup was ten minutes. The AI forecast has been accurate every single morning for seven months. I check it alongside my coffee every day."</p>
-        <div class="test-author">
-          <div class="test-av" style="background:linear-gradient(135deg,var(--blue),#7ec8f5)">Z</div>
-          <div><div class="test-name">Zuzana Horáková</div><div class="test-role">16 panels · Košice</div></div>
-        </div>
-      </div>
-      <div class="test-card reveal d2">
-        <div class="test-saving">€ 290 saved</div>
-        <div class="test-stars">★★★★★</div>
-        <p class="test-q">"The data is real, the interface is beautiful, and it works with my Fronius out of the box. Nothing else I tried even came close to this level of quality."</p>
-        <div class="test-author">
-          <div class="test-av" style="background:linear-gradient(135deg,var(--green),#6ee7b7)">P</div>
-          <div><div class="test-name">Peter Blaho</div><div class="test-role">8 panels · Žilina</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- NUMBERS -->
-<section id="numbers">
-  <div class="container">
-    <div class="num-grid reveal">
-      <div class="num-cell"><span class="num-n counter" data-to="1247" data-dur="2200">0</span><span class="num-l">Installations</span></div>
-      <div class="num-cell"><span class="num-n counter" data-prefix="€" data-to="2400000" data-short="1" data-dur="2400">0</span><span class="num-l">Energy Value Tracked</span></div>
-      <div class="num-cell"><span class="num-n counter" data-to="840" data-suffix=" t" data-dur="2000">0</span><span class="num-l">CO₂ Offset</span></div>
-      <div class="num-cell"><span class="num-n counter" data-to="99.7" data-dec="1" data-suffix="%" data-dur="1600">0</span><span class="num-l">Platform Uptime</span></div>
     </div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section id="pricing">
-  <div class="container">
+<section id="pricing" class="sec">
+  <div class="wrap">
     <div class="price-head reveal">
-      <div class="tag"><span class="tag-dot"></span>Pricing</div>
-      <h2 class="sec-title">Simple, <em>honest</em> pricing</h2>
-      <p class="sec-sub" style="margin:14px auto 30px;text-align:center">No hidden fees. No lock-in contracts. Cancel or pause any time.</p>
+      <p class="sec-tag">Pricing</p>
+      <h2 class="sec-h">Simple, honest <em>pricing.</em></h2>
+      <p class="sec-p" style="margin:0 auto">No hidden fees. No lock-in. Cancel any time.</p>
       <div class="price-toggle">
-        <button class="pt on" id="ptM" onclick="setPrice('m')">Monthly</button>
-        <button class="pt" id="ptY" onclick="setPrice('y')">Yearly <span class="pt-badge">−20%</span></button>
+        <button class="ptb on" id="ptM" onclick="setP('m')">Monthly</button>
+        <button class="ptb" id="ptY" onclick="setP('y')">Annual <span class="ptb-save">−20%</span></button>
       </div>
     </div>
     <div class="price-grid reveal d1">
-      <div class="pc-card">
+      <div class="pcard">
         <div class="pc-tier">Starter</div>
-        <div class="pc-price" id="pp0"><sup>€</sup>0<span>/mo</span></div>
-        <p class="pc-desc">For a single installation, just getting started.</p>
-        <div class="pc-line"></div>
-        <ul class="pc-feats">
+        <div class="pc-price" id="pp0"><sup>€</sup>4.90<span class="mo">/mo</span></div>
+        <p class="pc-desc">Single installation — ideal for homeowners.</p>
+        <div class="pc-hr"></div>
+        <ul class="pc-list">
           <li>1 installation</li>
-          <li>Real-time monitoring</li>
-          <li>Daily summary reports</li>
+          <li>Real-time monitoring (4 s)</li>
+          <li>Daily email report</li>
           <li>Email fault alerts</li>
-          <li class="off">AI yield forecasting</li>
-          <li class="off">Data export (CSV / PDF)</li>
-          <li class="off">Priority support</li>
+          <li>90-day data history</li>
+          <li class="no">AI forecasting</li>
+          <li class="no">CSV / PDF export</li>
         </ul>
-        <button class="pc-btn pc-btn-o" onclick="scrollToContact()">Contact Us</button>
+        <button class="pcbtn pcbtn-s" onclick="sc()">Buy</button>
       </div>
-      <div class="pc-card popular">
-        <div class="pc-badge">Most Popular</div>
+      <div class="pcard pop">
+        <div class="pc-star">Popular</div>
         <div class="pc-tier">Pro</div>
-        <div class="pc-price" id="pp1"><sup>€</sup>9<span>/mo</span></div>
-        <p class="pc-desc">For homeowners who want the full picture.</p>
-        <div class="pc-line"></div>
-        <ul class="pc-feats">
+        <div class="pc-price" id="pp1"><sup>€</sup>9.90<span class="mo">/mo</span></div>
+        <p class="pc-desc">Full monitoring for up to 3 installations.</p>
+        <div class="pc-hr"></div>
+        <ul class="pc-list">
           <li>Up to 3 installations</li>
-          <li>Real-time monitoring</li>
+          <li>Real-time monitoring (4 s)</li>
           <li>Daily + weekly reports</li>
           <li>Push + email alerts</li>
+          <li>Unlimited data history</li>
           <li>AI yield forecasting</li>
-          <li>Data export (CSV / PDF)</li>
-          <li class="off">Priority support</li>
+          <li>CSV + PDF export</li>
         </ul>
-        <button class="pc-btn pc-btn-g" onclick="scrollToContact()">Request a Demo</button>
+        <button class="pcbtn pcbtn-s" onclick="sc()">Buy</button>
       </div>
-      <div class="pc-card">
+      <div class="pcard">
         <div class="pc-tier">Business</div>
-        <div class="pc-price" id="pp2"><sup>€</sup>29<span>/mo</span></div>
-        <p class="pc-desc">For installers, property managers, and fleets.</p>
-        <div class="pc-line"></div>
-        <ul class="pc-feats">
+        <div class="pc-price" id="pp2"><sup>€</sup>29.90<span class="mo">/mo</span></div>
+        <p class="pc-desc">For installers and property managers.</p>
+        <div class="pc-hr"></div>
+        <ul class="pc-list">
           <li>Unlimited installations</li>
-          <li>Real-time monitoring</li>
-          <li>Full analytics suite + API</li>
+          <li>Real-time monitoring (4 s)</li>
+          <li>Full analytics + REST API</li>
           <li>Push + email + SMS alerts</li>
-          <li>AI forecasting</li>
-          <li>Full export + white-label</li>
-          <li>Priority support (24h SLA)</li>
+          <li>Unlimited history</li>
+          <li>AI forecasting + white-label</li>
+          <li>Priority support (24 h SLA)</li>
         </ul>
-        <button class="pc-btn pc-btn-o" onclick="scrollToContact()">Contact Sales</button>
+        <button class="pcbtn pcbtn-s" onclick="sc()">Buy</button>
       </div>
     </div>
+    <p class="price-hw">Hardware: <strong>EkoSlnko Bridge — €49 one-time</strong> · Free shipping SK & CZ · 2-year warranty · 14-day return</p>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact">
-  <div class="container">
+<section id="contact" class="sec sec-alt">
+  <div class="wrap">
     <div class="contact-grid">
       <div class="reveal">
-        <div class="tag"><span class="tag-dot"></span>Get In Touch</div>
-        <h2 class="sec-title" style="margin-top:14px">Let's talk about<br>your <em>installation</em></h2>
-        <p class="sec-sub">Whether you have a specific inverter, a large array, or just want a personalised demo — reach out. We respond within one business day.</p>
-        <div class="contact-detail">
-          <div class="cd-ico">📧</div>
-          <div><div class="cd-lbl">Email</div><div class="cd-val"><a href="mailto:hello@ekoslnko.sk">hello@ekoslnko.sk</a></div></div>
-        </div>
-        <div class="contact-detail">
-          <div class="cd-ico">📞</div>
-          <div><div class="cd-lbl">Phone</div><div class="cd-val"><a href="tel:+421900000000">+421 900 000 000</a></div></div>
-        </div>
-        <div class="contact-detail">
-          <div class="cd-ico">📍</div>
-          <div><div class="cd-lbl">Office</div><div class="cd-val">Obchodná 4, 811 06 Bratislava, Slovakia</div></div>
-        </div>
-        <div class="contact-detail">
-          <div class="cd-ico">🕐</div>
-          <div><div class="cd-lbl">Business Hours</div><div class="cd-val">Mon – Fri, 09:00 – 17:00 CET</div></div>
-        </div>
+        <p class="sec-tag">Contact</p>
+        <h2 class="sec-h">Talk to us <em>directly.</em></h2>
+        <p class="sec-p">We're three people. When you contact us, a founder replies. Always within one business day.</p>
+        <div class="ci-detail"><div class="ci-ico">📧</div><div><div class="ci-lbl">Email</div><div class="ci-val"><a href="/cdn-cgi/l/email-protection#265553565649545266434d49554a484d49084a494a"><span class="__cf_email__" data-cfemail="1d6e686d6d726f695d7876726e7173767233717271">[email&#160;protected]</span></a></div></div></div>
+        <div class="ci-detail"><div class="ci-ico">📞</div><div><div class="ci-lbl">Phone</div><div class="ci-val"><a href="tel:+421911234567">+421 905 123 456</a></div></div></div>
+        <div class="ci-detail"><div class="ci-ico">📍</div><div><div class="ci-lbl">Office</div><div class="ci-val">Tajovského 30, 974 01 Banská Bystrica</div></div></div>
+        <div class="ci-detail"><div class="ci-ico">🕐</div><div><div class="ci-lbl">Hours</div><div class="ci-val">Mon–Fri · 09:00–17:00 CET</div></div></div>
       </div>
-      <div class="contact-form reveal d1">
-        <div id="formWrap">
-          <div class="cf-title">Send us a message</div>
-          <p class="cf-sub">We'll reply to your email within one business day.</p>
+      <div class="cform reveal d1">
+        <div id="fWrap">
+          <div class="cf-h">Send us a message</div>
+          <p class="cf-s">We'll reply within one business day.</p>
           <form id="cForm" novalidate>
-            <div class="form-row">
-              <div class="form-field" id="ff-name">
-                <label for="cf-name">Full Name</label>
-                <input type="text" id="cf-name" placeholder="Ján Novák" autocomplete="name">
-                <div class="form-error">Please enter your name.</div>
-              </div>
-              <div class="form-field" id="ff-email">
-                <label for="cf-email">Email Address</label>
-                <input type="email" id="cf-email" placeholder="jan@example.sk" autocomplete="email">
-                <div class="form-error">Please enter a valid email.</div>
-              </div>
+            <div class="frow">
+              <div class="ff" id="ff-n"><label for="cf-name">Name</label><input type="text" id="cf-name" placeholder="Ján Novák"><div class="ff-e">Required.</div></div>
+              <div class="ff" id="ff-e"><label for="cf-email">Email</label><input type="email" id="cf-email" placeholder="jan@example.sk"><div class="ff-e">Valid email required.</div></div>
             </div>
-            <div class="form-row">
-              <div class="form-field">
-                <label for="cf-phone">Phone (optional)</label>
-                <input type="tel" id="cf-phone" placeholder="+421 900 000 000" autocomplete="tel">
-              </div>
-              <div class="form-field">
-                <label for="cf-subject">I'm interested in</label>
-                <select id="cf-subject">
-                  <option value="">Select a topic…</option>
-                  <option>Personalised Demo</option>
-                  <option>Starter Plan</option>
+            <div class="frow">
+              <div class="ff"><label for="cf-phone">Phone (optional)</label><input type="tel" id="cf-phone" placeholder="+421 911…"></div>
+              <div class="ff"><label for="cf-topic">Topic</label>
+                <select id="cf-topic">
+                  <option value="">Select…</option>
+                  <option>Product Demo</option>
                   <option>Pro Plan</option>
-                  <option>Business / Installer</option>
-                  <option>Device Compatibility</option>
-                  <option>Something Else</option>
+                  <option>Business Plan</option>
+                  <option>Hardware Order</option>
+                  <option>Compatibility Check</option>
+                  <option>Other</option>
                 </select>
               </div>
             </div>
-            <div class="form-field" id="ff-msg">
-              <label for="cf-msg">Message</label>
-              <textarea id="cf-msg" placeholder="Tell us about your installation — inverter brand, number of panels, what you'd like to track…"></textarea>
-              <div class="form-error">Please write a brief message.</div>
-            </div>
-            <button type="submit" class="form-submit">Send Message →</button>
-            <p class="form-note">We never share your data. Submitting confirms you've read our Privacy Policy.</p>
+            <div class="ff" id="ff-m"><label for="cf-msg">Message</label><textarea id="cf-msg" placeholder="Tell us about your installation…"></textarea><div class="ff-e">Required.</div></div>
+            <button type="submit" class="fsub">Send Message →</button>
+            <p class="fnote">We don't share your data. <a href="#" onclick="event.preventDefault();openModal('modalPrivacy')" style="color:var(--or);text-decoration:underline;text-underline-offset:2px">Read our Privacy Policy.</a></p>
           </form>
         </div>
-        <div class="form-success" id="formOk">
-          <div class="form-success-icon">✉️</div>
-          <div class="form-success-h">Message sent!</div>
-          <p class="form-success-p">Thank you for reaching out. We'll reply to your email within one business day.</p>
+        <div class="fok" id="fOk">
+          <div class="fok-ico">✉️</div>
+          <div class="fok-h">Message received!</div>
+          <p class="fok-p">We'll reply within one business day.</p>
         </div>
       </div>
     </div>
@@ -746,394 +749,574 @@ footer{background:var(--bg1);border-top:1px solid var(--brd);padding:56px 0 28px
 </section>
 
 <!-- FAQ -->
-<section id="faq">
-  <div class="container">
+<section class="sec">
+  <div class="wrap">
     <div class="faq-grid">
       <div class="reveal">
-        <div class="tag"><span class="tag-dot"></span>FAQ</div>
-        <h2 class="sec-title" style="margin-top:14px">Questions we<br><em>hear most</em></h2>
-        <p class="sec-sub">Can't find an answer? <a href="#contact" style="color:var(--gold);text-decoration:underline;text-underline-offset:3px">Send us a message</a> and we'll get back to you directly.</p>
+        <p class="sec-tag">FAQ</p>
+        <h2 class="sec-h">Common<br><em>questions.</em></h2>
+        <p class="sec-p">Still unsure? <a href="#contact" style="color:var(--or);text-decoration:underline;text-underline-offset:3px">Message us</a> — we answer everything personally.</p>
       </div>
-      <div class="reveal d1">
-        <div class="faq-list" id="faqList">
-          <div class="faq-item">
-            <button class="faq-q">Which inverters are compatible?<span class="faq-icon">+</span></button>
-            <div class="faq-a">We support over 40 brands including Solaredge, Fronius, Huawei FusionSolar, SMA, Growatt, Goodwe, Solis, and more. If your inverter has an RS485 port or local network API, it will work. Send us your model number if you're not sure.</div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-q">How does installation work?<span class="faq-icon">+</span></button>
-            <div class="faq-a">The EkoSlnko Bridge plugs into your inverter — no electrician needed. The whole process takes 10–15 minutes. Once connected, your dashboard is live within two minutes. A printed setup guide is included in the box.</div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-q">Is my data secure?<span class="faq-icon">+</span></button>
-            <div class="faq-a">All data is encrypted in transit (TLS 1.3) and at rest. Your installation data is stored on EU servers in full compliance with GDPR. We never sell or share your data with third parties.</div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-q">Can I cancel my subscription?<span class="faq-icon">+</span></button>
-            <div class="faq-a">Yes, at any time — no cancellation fees, no minimum terms. If you cancel, you retain access until the end of your current billing period. Both monthly and annual plans are available.</div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-q">How accurate is the AI forecast?<span class="faq-icon">+</span></button>
-            <div class="faq-a">Our model achieves 94% accuracy over 48-hour windows by combining your historical output with live ECMWF weather data and regional irradiance models. Accuracy improves over the first 30 days as the model learns your specific array.</div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-q">Is there a trial period?<span class="faq-icon">+</span></button>
-            <div class="faq-a">The Starter plan is permanently free for one installation. Pro and Business plans include a 30-day free trial — no credit card required. Reach out to arrange a personalised demo of any plan.</div>
-          </div>
-        </div>
+      <div class="faq-list reveal d1" id="faqList">
+        <div class="fi"><button class="fiq">Which inverters are compatible?<span class="fi-ico">+</span></button><div class="fia">42 brands including Solaredge, Fronius, Huawei, SMA, Growatt, Goodwe, Solis, Deye, Sofar, Sungrow and more. Requires RS485 or local WiFi API. Send your model number — we'll confirm before you buy.</div></div>
+        <div class="fi"><button class="fiq">What is the EkoSlnko Bridge?<span class="fi-ico">+</span></button><div class="fia">A small device (size of a USB stick) you plug into your inverter. It reads data every 4 seconds and sends it to our platform — no PC needs to stay on. One-time cost: €49.</div></div>
+        <div class="fi"><button class="fiq">Do you offer a free trial?<span class="fi-ico">+</span></button><div class="fia">Unfortunately, no — we do not offer a free trial. You can try live demo.</div></div>
+        <div class="fi"><button class="fiq">Is my data secure?<span class="fi-ico">+</span></button><div class="fia">EU servers only, GDPR-compliant. We use multi-layer encryption: TLS 1.3 for transport, AES‑256 at rest, HSM-backed key management, and encrypted backups. Access is protected by role-based access control (RBAC) and strict network isolation; we perform regular security reviews and vulnerability scans. You can export or delete all your data at any time from account settings, and enterprise customers can request additional encryption and isolation options.</div></div>
+        <div class="fi"><button class="fiq">How accurate is the AI forecast?<span class="fi-ico">+</span></button><div class="fia">Currently 94% accuracy (6.2% MAPE) over 48-hour windows. Improves over the first 30 days as it learns your array and local weather patterns.</div></div>
+        <div class="fi"><button class="fiq">Can I cancel any time?<span class="fi-ico">+</span></button><div class="fia">Yes — no fees, no minimum term. Cancel from your account settings. Access continues until end of billing period, then reverts to Free.</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA BAND -->
-<section id="cta-band">
-  <div class="container">
-    <div class="cta-box reveal">
-      <h2 class="cta-h">Your solar system is working.<br><em>Is it working for you?</em></h2>
-      <p class="cta-p">Join 1,247 homeowners already tracking every watt. See a personalised demo tailored to your installation.</p>
-      <div class="cta-actions">
-        <a href="#contact" class="btn-gold">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><polyline points="3,8 12,13 21,8"/></svg>
-          Request a Demo
-        </a>
-        <a href="#demo" class="btn-outline">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Try the Live Demo
-        </a>
+<!-- CTA -->
+<section id="cta">
+  <div class="wrap">
+    <div class="cta-inner reveal">
+      <h2 class="cta-h">Your panels are running.<br>Are you <em>watching?</em></h2>
+      <p class="cta-p">See the full dashboard — no commitment, no credit card.</p>
+      <div class="cta-acts">
+        <a href="#contact" class="btn-solid">Request a Demo</a>
+        <a href="#demo" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);font-size:14px;font-weight:500;padding:12px 24px;border-radius:40px;display:inline-flex;align-items:center;gap:7px;transition:background .2s,transform .2s" onmouseover="this.style.background='rgba(255,255,255,.16)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">Try Live Demo</a>
       </div>
-      <p class="cta-note">No credit card required · GDPR compliant · Cancel anytime</p>
+      <p class="cta-note">Plans from €4.90/mo · Hardware ships in 3 days · GDPR compliant · Made in Slovakia</p>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="container">
-    <div class="footer-top">
+  <div class="wrap">
+    <div class="ft-top">
       <div>
-        <div class="nav-logo" style="font-size:18px"><span class="nav-sun" style="width:22px;height:22px"></span>Eko<span>Slnko</span></div>
-        <p class="footer-brand-desc">Solar intelligence for Central European homeowners. Designed and built in Slovakia. 🇸🇰</p>
+        <div class="ft-logo"><span class="ft-logo-dot"></span>Eko<em>Slnko</em></div>
+        <p class="ft-desc">Solar monitoring for Central European homeowners. Built in Bratislava, Slovakia.</p>
       </div>
-      <div class="footer-col"><h4>Product</h4><div class="footer-links"><a href="#demo">Live Demo</a><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#how">How It Works</a></div></div>
-      <div class="footer-col"><h4>Company</h4><div class="footer-links"><a href="#contact">About Us</a><a href="#">Blog</a><a href="#">Careers</a><a href="#contact">Press</a></div></div>
-      <div class="footer-col"><h4>Legal</h4><div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a><a href="#">GDPR</a></div></div>
+      <div class="ftc"><h4>Product</h4><div class="ftl"><a href="#demo">Live Demo</a><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#how">How It Works</a></div></div>
+      <div class="ftc"><h4>Company</h4><div class="ftl"><a href="#about">About Us</a><a href="#">Blog</a><a href="#contact">Contact</a><a href="#">Careers</a></div></div>
+      <div class="ftc"><h4>Legal</h4><div class="ftl"><a href="#" onclick="event.preventDefault();openModal('modalPrivacy')">Privacy Policy</a><a href="#" onclick="event.preventDefault();openModal('modalTerms')">Terms of Service</a><a href="#" onclick="event.preventDefault();openModal('modalCookies')">Cookies</a><a href="#" onclick="event.preventDefault();openModal('modalGdpr')">GDPR</a></div></div>
     </div>
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 EkoSlnko s.r.o. IČO: 12345678. All rights reserved.</span>
-      <div class="footer-badges"><span class="footer-badge">GDPR</span><span class="footer-badge">EU Servers</span><span class="footer-badge">🇸🇰 Made in Slovakia</span></div>
+    <div class="ft-bot">
+      <span class="ft-copy">© 2026 EkoSlnko s.r.o. · IČO: 00 123 456 · Tajovského 30, 974 01 Banská Bystrica</span>
+      <div class="ft-tags"><span class="ft-tag">GDPR</span><span class="ft-tag">EU Servers</span><span class="ft-tag">Slovakia</span></div>
     </div>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 /* NAV */
-window.addEventListener('scroll', function() {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
-}, { passive: true });
-
-/* ORBS */
-setTimeout(function() {
-  document.querySelectorAll('.g1,.g2,.g3').forEach(function(el) { el.classList.add('on'); });
-}, 80);
-
-/* MARQUEE */
-(function() {
-  var items = [
-    ['Installations','1,247'],['Compatible Inverters','40+'],['Avg. Daily Output','4.8 kWh'],
-    ['Customer Satisfaction','99%'],['Platform Uptime','99.7%'],['CO₂ Offset','840 t'],
-    ['Avg. Annual Savings','€ 312'],['AI Forecast Accuracy','94%'],['Countries','4'],['Setup Time','< 15 min']
-  ];
-  var html = '';
-  items.concat(items).forEach(function(it) {
-    html += '<div class="marquee-item"><span>' + it[0] + '</span><span class="mi-val">' + it[1] + '</span></div>';
-  });
-  document.getElementById('mtrack').innerHTML = html;
-})();
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('up',window.scrollY>40);},{passive:true});
 
 /* REVEAL */
-var ro = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
-
-/* COUNTERS */
-function animCounter(el) {
-  var to = parseFloat(el.dataset.to);
-  var dec = parseInt(el.dataset.dec || '0');
-  var prefix = el.dataset.prefix || '';
-  var suffix = el.dataset.suffix || '';
-  var dur = parseInt(el.dataset.dur || '1800');
-  var short = el.dataset.short === '1';
-  var t0 = performance.now();
-  function tick(now) {
-    var p = Math.min((now - t0) / dur, 1);
-    var e = 1 - Math.pow(1 - p, 4);
-    var v = to * e;
-    var s;
-    if (short) { s = v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'k' : v.toFixed(0); }
-    else { s = dec > 0 ? v.toFixed(dec) : Math.round(v).toLocaleString('sk-SK'); }
-    el.textContent = prefix + s + suffix;
-    if (p < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-var co = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) { if (e.isIntersecting) { animCounter(e.target); co.unobserve(e.target); } });
-}, { threshold: 0.4 });
-document.querySelectorAll('.counter').forEach(function(el) { co.observe(el); });
+var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
 
 /* PRICING */
-var PP = { m: [0,9,29], y: [0,7,23] };
-function setPrice(m) {
-  document.getElementById('ptM').classList.toggle('on', m==='m');
-  document.getElementById('ptY').classList.toggle('on', m==='y');
-  var p = PP[m];
-  document.getElementById('pp0').innerHTML = '<sup>€</sup>'+p[0]+'<span>/mo</span>';
-  document.getElementById('pp1').innerHTML = '<sup>€</sup>'+p[1]+'<span>/mo</span>';
-  document.getElementById('pp2').innerHTML = '<sup>€</sup>'+p[2]+'<span>/mo</span>';
+var PP={m:['4.90','9.90','29.90'],y:['3.92','7.92','23.92']};
+function setP(m){
+  document.getElementById('ptM').classList.toggle('on',m==='m');
+  document.getElementById('ptY').classList.toggle('on',m==='y');
+  var p=PP[m];
+  ['pp0','pp1','pp2'].forEach(function(id,i){document.getElementById(id).innerHTML='<sup>€</sup>'+p[i]+'<span class="mo">/mo</span>';});
 }
-
-function scrollToContact() {
-  document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-}
+function sc(){document.getElementById('contact').scrollIntoView({behavior:'smooth'});}
 
 /* FAQ */
-document.getElementById('faqList').addEventListener('click', function(e) {
-  var btn = e.target.closest('.faq-q');
-  if (!btn) return;
-  var item = btn.closest('.faq-item');
-  var wasOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); });
-  if (!wasOpen) item.classList.add('open');
+document.getElementById('faqList').addEventListener('click',function(e){
+  var btn=e.target.closest('.fiq');if(!btn)return;
+  var fi=btn.closest('.fi');var was=fi.classList.contains('open');
+  document.querySelectorAll('.fi.open').forEach(function(i){i.classList.remove('open');});
+  if(!was)fi.classList.add('open');
 });
 
-/* CONTACT FORM */
-document.getElementById('cForm').addEventListener('submit', function(e) {
+/* FORM */
+var re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+document.getElementById('cForm').addEventListener('submit',function(e){
   e.preventDefault();
-  var name  = document.getElementById('cf-name').value.trim();
-  var email = document.getElementById('cf-email').value.trim();
-  var msg   = document.getElementById('cf-msg').value.trim();
-  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var ok = true;
+  var n=document.getElementById('cf-name').value.trim();
+  var em=document.getElementById('cf-email').value.trim();
+  var ph=document.getElementById('cf-phone').value.trim();
+  var tp=document.getElementById('cf-topic').value;
+  var m=document.getElementById('cf-msg').value.trim();
+  document.getElementById('ff-n').classList.toggle('err',!n);
+  document.getElementById('ff-e').classList.toggle('err',!em||!re.test(em));
+  document.getElementById('ff-m').classList.toggle('err',!m);
+  if(!n||!em||!re.test(em)||!m)return;
 
-  var ffn = document.getElementById('ff-name');
-  var ffe = document.getElementById('ff-email');
-  var ffm = document.getElementById('ff-msg');
+  var btn=document.querySelector('.fsub');
+  btn.disabled=true;
+  btn.textContent='Sending…';
 
-  ffn.classList.toggle('field-err', !name);
-  ffe.classList.toggle('field-err', !email || !emailRe.test(email));
-  ffm.classList.toggle('field-err', !msg);
+  // ── YOUR WEB3FORMS KEY BELOW ──────────────────────────────
+  var ACCESS_KEY='35cc9a20-3d14-48e3-88c7-216a28db4a92';
+  // Get it free at web3forms.com (enter your email, copy the key)
+  // ─────────────────────────────────────────────────────────
 
-  if (!name || !email || !emailRe.test(email) || !msg) return;
-
-  // Clear errors on subsequent input
-  [['cf-name','ff-name'],['cf-email','ff-email'],['cf-msg','ff-msg']].forEach(function(pair) {
-    document.getElementById(pair[0]).addEventListener('input', function() {
-      document.getElementById(pair[1]).classList.remove('field-err');
-    }, { once: true });
+  fetch('https://api.web3forms.com/submit',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({
+      access_key:ACCESS_KEY,
+      subject:'EkoSlnko — New message'+(tp?' ['+tp+']':''),
+      from_name:n,
+      email:em,
+      phone:ph||'—',
+      topic:tp||'—',
+      message:m
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data.success){
+      document.getElementById('fWrap').style.display='none';
+      document.getElementById('fOk').style.display='block';
+    } else {
+      btn.disabled=false;
+      btn.textContent='Send Message →';
+      alert('Something went wrong. Please try again or email us directly.');
+    }
+  })
+  .catch(function(){
+    btn.disabled=false;
+    btn.textContent='Send Message →';
+    alert('Network error. Please try again or email us directly.');
   });
-
-  document.getElementById('formWrap').style.display = 'none';
-  document.getElementById('formOk').style.display = 'block';
 });
+var fm={'cf-name':'ff-n','cf-email':'ff-e','cf-msg':'ff-m'};
+Object.keys(fm).forEach(function(id){document.getElementById(id).addEventListener('input',function(){document.getElementById(fm[id]).classList.remove('err');});});
 
-/* SKY CANVAS */
-var skyEl = document.getElementById('skyCanvas');
-var skyCtx = skyEl.getContext('2d');
-function rsz() { skyEl.width = skyEl.offsetWidth; skyEl.height = skyEl.offsetHeight || 280; }
-rsz();
-window.addEventListener('resize', rsz, { passive: true });
+/* SOLAR PHYSICS */
+function calcOut(t,cl,n){var h=t/60;if(h<5||h>19.5)return 0;return Math.max(0,Math.sin(Math.PI*(h-5)/14.5)*(1-(cl/100)*0.85)*n*0.42);}
+function calcKwh(t,cl,n){var s=0;for(var i=300;i<t;i+=60)s+=calcOut(i,cl,n);return s*0.85;}
 
-function lerp(a, b, t) { return a + (b - a) * t; }
-function l3(a, b, t) { return [lerp(a[0],b[0],t), lerp(a[1],b[1],t), lerp(a[2],b[2],t)]; }
-function rgb(c) { return 'rgb('+Math.round(c[0])+','+Math.round(c[1])+','+Math.round(c[2])+')'; }
-
-function drawSky(tMin, cloud) {
-  var W = skyEl.width, H = skyEl.height;
-  var h = tMin / 60;
-  var cf = cloud / 100;
-  var top, bot;
-
-  if (h < 5 || h > 21)      { top=[4,6,20];   bot=[6,10,35]; }
-  else if (h < 7)  { var t=(h-5)/2;  top=l3([4,6,20],[70,35,55],t);    bot=l3([6,10,35],[160,88,50],t); }
-  else if (h < 9)  { var t=(h-7)/2;  top=l3([70,35,55],[22,60,140],t); bot=l3([160,88,50],[100,160,210],t); }
-  else if (h < 17) { top=[18,48,130]; bot=[72,148,208]; }
-  else if (h < 19) { var t=(h-17)/2; top=l3([18,48,130],[85,44,28],t); bot=l3([72,148,208],[210,110,52],t); }
-  else if (h < 21) { var t=(h-19)/2; top=l3([85,44,28],[4,6,20],t);    bot=l3([210,110,52],[6,10,35],t); }
-  else             { top=[4,6,20]; bot=[6,10,35]; }
-
-  top = top.map(function(c) { return c*(1-cf*0.55)+55*cf; });
-  bot = bot.map(function(c) { return c*(1-cf*0.4)+90*cf; });
-
-  var grd = skyCtx.createLinearGradient(0,0,0,H);
-  grd.addColorStop(0, rgb(top)); grd.addColorStop(1, rgb(bot));
-  skyCtx.fillStyle = grd; skyCtx.fillRect(0,0,W,H);
-
-  var isDay = h >= 5 && h <= 19;
-  if (isDay) {
-    var prog = (h-5)/14;
-    var sx = W*(0.08+prog*0.84);
-    var sy = H - H*0.75*Math.sin(Math.PI*prog) - H*0.06;
-    var op = Math.min(1, Math.sin(Math.PI*prog)*2.5);
-
-    var glw = skyCtx.createRadialGradient(sx,sy,0,sx,sy,100);
-    glw.addColorStop(0,'rgba(255,210,50,'+(0.35*op)+')');
-    glw.addColorStop(0.3,'rgba(255,150,30,'+(0.12*op)+')');
-    glw.addColorStop(1,'transparent');
-    skyCtx.fillStyle = glw; skyCtx.fillRect(0,0,W,H);
-
-    var sr = 20 + Math.sin(Date.now()/2200)*1.5;
-    skyCtx.beginPath(); skyCtx.arc(sx,sy,sr,0,Math.PI*2);
-    var sg = skyCtx.createRadialGradient(sx,sy,0,sx,sy,sr);
-    sg.addColorStop(0,'rgba(255,252,200,'+op+')');
-    sg.addColorStop(0.55,'rgba(255,198,48,'+op+')');
-    sg.addColorStop(1,'rgba(255,148,0,'+(op*0.7)+')');
-    skyCtx.fillStyle = sg; skyCtx.fill();
-
-    if (cloud < 55) {
-      var ro2 = op*(1-cloud/80)*0.32;
-      for (var r=0; r<10; r++) {
-        var ang = (r/10)*Math.PI*2 + Date.now()/7000;
-        var len = 36 + Math.sin(Date.now()/900+r)*7;
-        skyCtx.beginPath();
-        skyCtx.moveTo(sx+Math.cos(ang)*(sr+4), sy+Math.sin(ang)*(sr+4));
-        skyCtx.lineTo(sx+Math.cos(ang)*(sr+4+len), sy+Math.sin(ang)*(sr+4+len));
-        skyCtx.strokeStyle = 'rgba(255,225,90,'+ro2+')';
-        skyCtx.lineWidth = 1.8; skyCtx.stroke();
-      }
-    }
-  } else {
-    skyCtx.beginPath(); skyCtx.arc(W*0.78,H*0.22,13,0,Math.PI*2);
-    skyCtx.fillStyle = 'rgba(218,228,255,.88)'; skyCtx.fill();
-    for (var s=0; s<36; s++) {
-      var bk = 0.3+0.7*Math.sin(Date.now()/900+s);
-      skyCtx.beginPath(); skyCtx.arc((s*141.3)%W,(s*87.7)%(H*0.75),1.1,0,Math.PI*2);
-      skyCtx.fillStyle = 'rgba(200,210,255,'+bk+')'; skyCtx.fill();
-    }
+/* SKY */
+var skyEl=document.getElementById('skyC'),skyCtx=skyEl.getContext('2d');
+function rsz(){skyEl.width=skyEl.offsetWidth;skyEl.height=skyEl.offsetHeight||220;}
+rsz();window.addEventListener('resize',rsz,{passive:true});
+function lerp(a,b,t){return a+(b-a)*t;}
+function l3(a,b,t){return[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];}
+function rgb(c){return'rgb('+Math.round(c[0])+','+Math.round(c[1])+','+Math.round(c[2])+')';}
+function drawSky(tm,cl){
+  var W=skyEl.width,H=skyEl.height,h=tm/60,cf=cl/100,top,bot;
+  if(h<5||h>21){top=[4,6,20];bot=[6,10,35];}
+  else if(h<7){var t=(h-5)/2;top=l3([4,6,20],[70,35,55],t);bot=l3([6,10,35],[160,88,50],t);}
+  else if(h<9){var t=(h-7)/2;top=l3([70,35,55],[22,60,140],t);bot=l3([160,88,50],[100,160,210],t);}
+  else if(h<17){top=[18,48,130];bot=[72,148,208];}
+  else if(h<19){var t=(h-17)/2;top=l3([18,48,130],[85,44,28],t);bot=l3([72,148,208],[210,110,52],t);}
+  else if(h<21){var t=(h-19)/2;top=l3([85,44,28],[4,6,20],t);bot=l3([210,110,52],[6,10,35],t);}
+  else{top=[4,6,20];bot=[6,10,35];}
+  top=top.map(function(c){return c*(1-cf*.55)+55*cf;});
+  bot=bot.map(function(c){return c*(1-cf*.4)+90*cf;});
+  var g=skyCtx.createLinearGradient(0,0,0,H);g.addColorStop(0,rgb(top));g.addColorStop(1,rgb(bot));
+  skyCtx.fillStyle=g;skyCtx.fillRect(0,0,W,H);
+  var isDay=h>=5&&h<=19;
+  if(isDay){
+    var prog=(h-5)/14,sx=W*(.08+prog*.84),sy=H-H*.78*Math.sin(Math.PI*prog)-H*.05,op=Math.min(1,Math.sin(Math.PI*prog)*2.5);
+    var glw=skyCtx.createRadialGradient(sx,sy,0,sx,sy,90);glw.addColorStop(0,'rgba(255,210,50,'+.32*op+')');glw.addColorStop(1,'transparent');
+    skyCtx.fillStyle=glw;skyCtx.fillRect(0,0,W,H);
+    var sr=18+Math.sin(Date.now()/2200)*1.5;
+    skyCtx.beginPath();skyCtx.arc(sx,sy,sr,0,Math.PI*2);
+    var sg=skyCtx.createRadialGradient(sx,sy,0,sx,sy,sr);sg.addColorStop(0,'rgba(255,252,200,'+op+')');sg.addColorStop(.6,'rgba(255,198,48,'+op+')');sg.addColorStop(1,'rgba(255,148,0,'+op*.7+')');
+    skyCtx.fillStyle=sg;skyCtx.fill();
+    if(cl<55){var ro2=op*(1-cl/80)*.25;for(var r=0;r<8;r++){var a=(r/8)*Math.PI*2+Date.now()/7000,l=28+Math.sin(Date.now()/900+r)*6;skyCtx.beginPath();skyCtx.moveTo(sx+Math.cos(a)*(sr+3),sy+Math.sin(a)*(sr+3));skyCtx.lineTo(sx+Math.cos(a)*(sr+3+l),sy+Math.sin(a)*(sr+3+l));skyCtx.strokeStyle='rgba(255,225,90,'+ro2+')';skyCtx.lineWidth=1.5;skyCtx.stroke();}}
+  }else{
+    skyCtx.beginPath();skyCtx.arc(W*.78,H*.22,10,0,Math.PI*2);skyCtx.fillStyle='rgba(218,228,255,.85)';skyCtx.fill();
+    for(var s=0;s<28;s++){var bk=.3+.7*Math.sin(Date.now()/900+s);skyCtx.beginPath();skyCtx.arc((s*141.3)%W,(s*87.7)%(H*.75),1,0,Math.PI*2);skyCtx.fillStyle='rgba(200,210,255,'+bk+')';skyCtx.fill();}
   }
-
-  if (cloud > 5) {
-    var cc2 = Math.floor(cloud/14)+1;
-    var cop = cloud/110;
-    var cb = (isDay&&h>8&&h<17) ? [255,255,255] : [72,85,105];
-    for (var ci=0; ci<cc2; ci++) {
-      var cxv = (W*(ci/cc2+0.08))%W;
-      var cyv = H*(0.12+(ci%3)*0.1)+Math.sin(Date.now()/2800+ci)*3;
-      var csz = 55+ci*18;
-      var cg = skyCtx.createRadialGradient(cxv,cyv,0,cxv,cyv,csz);
-      cg.addColorStop(0,'rgba('+cb[0]+','+cb[1]+','+cb[2]+','+cop+')');
-      cg.addColorStop(1,'transparent');
-      skyCtx.fillStyle = cg;
-      skyCtx.beginPath(); skyCtx.ellipse(cxv,cyv,csz,csz*0.48,0,0,Math.PI*2); skyCtx.fill();
-    }
-  }
+  if(cl>5){var cc=Math.floor(cl/14)+1,cop=cl/110,cb=(isDay&&h>8&&h<17)?[255,255,255]:[72,85,105];for(var ci=0;ci<cc;ci++){var cxv=(W*(ci/cc+.08))%W,cyv=H*(.1+(ci%3)*.1)+Math.sin(Date.now()/2800+ci)*3,csz=44+ci*15;var cg2=skyCtx.createRadialGradient(cxv,cyv,0,cxv,cyv,csz);cg2.addColorStop(0,'rgba('+cb[0]+','+cb[1]+','+cb[2]+','+cop+')');cg2.addColorStop(1,'transparent');skyCtx.fillStyle=cg2;skyCtx.beginPath();skyCtx.ellipse(cxv,cyv,csz,csz*.44,0,0,Math.PI*2);skyCtx.fill();}}
 }
 
 /* MINI CHART */
-var cEl = document.getElementById('miniChart');
-var cCtx = cEl.getContext('2d');
-function rszC() { cEl.width = cEl.offsetWidth; cEl.height = cEl.offsetHeight || 52; }
-rszC();
-window.addEventListener('resize', rszC, { passive: true });
+var mcEl=document.getElementById('miniC'),mcCtx=mcEl.getContext('2d');
+function rszm(){mcEl.width=mcEl.offsetWidth;mcEl.height=mcEl.offsetHeight||44;}
+rszm();window.addEventListener('resize',rszm,{passive:true});
+function drawMini(tm,cl,n){
+  var W=mcEl.width,H=mcEl.height;mcCtx.clearRect(0,0,W,H);
+  var data=Array.from({length:24},function(_,i){return i<5||i>19?0:Math.max(0,Math.sin(Math.PI*(i-5)/14)*(1-cl/120)*n*.42);});
+  var mx=Math.max.apply(null,data)||1;
+  var ag=mcCtx.createLinearGradient(0,0,0,H);ag.addColorStop(0,'rgba(232,96,26,.35)');ag.addColorStop(1,'rgba(232,96,26,.02)');
+  mcCtx.beginPath();mcCtx.moveTo(0,H);data.forEach(function(v,i){mcCtx.lineTo((i/23)*W,H-v/mx*(H-4)-2);});mcCtx.lineTo(W,H);mcCtx.closePath();mcCtx.fillStyle=ag;mcCtx.fill();
+  mcCtx.beginPath();data.forEach(function(v,i){var x=(i/23)*W,y=H-v/mx*(H-4)-2;i===0?mcCtx.moveTo(x,y):mcCtx.lineTo(x,y);});
+  mcCtx.strokeStyle='rgba(232,96,26,.7)';mcCtx.lineWidth=1.5;mcCtx.stroke();
+  var nx=(tm/60/23)*W;mcCtx.setLineDash([3,3]);mcCtx.beginPath();mcCtx.moveTo(nx,0);mcCtx.lineTo(nx,H);mcCtx.strokeStyle='rgba(255,255,255,.22)';mcCtx.lineWidth=1;mcCtx.stroke();mcCtx.setLineDash([]);
+  var ni=Math.min(Math.round(tm/60),23),ny=H-data[ni]/mx*(H-4)-2;
+  if(data[ni]>0){mcCtx.beginPath();mcCtx.arc(nx,ny,3.5,0,Math.PI*2);mcCtx.fillStyle='#e8601a';mcCtx.fill();}
+}
 
-function drawChart(tMin, cloud) {
-  var W = cEl.width, H = cEl.height;
-  cCtx.clearRect(0,0,W,H);
-  var data = Array.from({length:24}, function(_,i) {
-    if (i<5||i>19) return 0;
-    return Math.max(0, Math.sin(Math.PI*(i-5)/14)*(1-cloud/120));
-  });
-  var curH = tMin/60;
-
-  var ag = cCtx.createLinearGradient(0,0,0,H);
-  ag.addColorStop(0,'rgba(201,168,76,.38)'); ag.addColorStop(1,'rgba(201,168,76,.02)');
-  cCtx.beginPath(); cCtx.moveTo(0,H);
-  data.forEach(function(v,i) { cCtx.lineTo((i/23)*W, H-v*(H-4)-2); });
-  cCtx.lineTo(W,H); cCtx.closePath(); cCtx.fillStyle=ag; cCtx.fill();
-
-  cCtx.beginPath();
-  data.forEach(function(v,i) { var x=(i/23)*W,y=H-v*(H-4)-2; i===0?cCtx.moveTo(x,y):cCtx.lineTo(x,y); });
-  cCtx.strokeStyle='rgba(201,168,76,.65)'; cCtx.lineWidth=1.5; cCtx.stroke();
-
-  var nx = (curH/23)*W;
-  cCtx.setLineDash([3,3]);
-  cCtx.beginPath(); cCtx.moveTo(nx,0); cCtx.lineTo(nx,H);
-  cCtx.strokeStyle='rgba(255,255,255,.2)'; cCtx.lineWidth=1; cCtx.stroke();
-  cCtx.setLineDash([]);
-  var ni = Math.min(Math.round(curH),23);
-  var ny = H-data[ni]*(H-4)-2;
-  cCtx.beginPath(); cCtx.arc(nx,ny,3.5,0,Math.PI*2);
-  cCtx.fillStyle = data[ni]>0?'#c9a84c':'rgba(255,255,255,.3)'; cCtx.fill();
+/* HERO CHART */
+var hcEl=document.getElementById('hcChart'),hcCtx=hcEl.getContext('2d');
+function rszhc(){hcEl.width=hcEl.offsetWidth;hcEl.height=hcEl.offsetHeight||44;}
+rszhc();window.addEventListener('resize',rszhc,{passive:true});
+function drawHcChart(tm){
+  var W=hcEl.width,H=hcEl.height;hcCtx.clearRect(0,0,W,H);
+  var data=Array.from({length:24},function(_,i){return i<5||i>19?0:Math.max(0,Math.sin(Math.PI*(i-5)/14));});
+  var ag=hcCtx.createLinearGradient(0,0,0,H);ag.addColorStop(0,'rgba(59,130,246,.25)');ag.addColorStop(1,'rgba(59,130,246,.02)');
+  hcCtx.beginPath();hcCtx.moveTo(0,H);data.forEach(function(v,i){hcCtx.lineTo((i/23)*W,H-v*(H-3)-2);});hcCtx.lineTo(W,H);hcCtx.closePath();hcCtx.fillStyle=ag;hcCtx.fill();
+  hcCtx.beginPath();data.forEach(function(v,i){var x=(i/23)*W,y=H-v*(H-3)-2;i===0?hcCtx.moveTo(x,y):hcCtx.lineTo(x,y);});
+  hcCtx.strokeStyle='rgba(59,130,246,.6)';hcCtx.lineWidth=1.5;hcCtx.stroke();
+  var nx=(tm/60/23)*W;hcCtx.setLineDash([3,3]);hcCtx.beginPath();hcCtx.moveTo(nx,0);hcCtx.lineTo(nx,H);hcCtx.strokeStyle='rgba(0,0,0,.12)';hcCtx.lineWidth=1;hcCtx.stroke();hcCtx.setLineDash([]);
 }
 
 /* PANELS */
-function buildPanels(n) {
-  var g = document.getElementById('panelGrid'); g.innerHTML = '';
-  for (var i=0; i<n; i++) { var d=document.createElement('div'); d.className='pc'; d.id='pc'+i; g.appendChild(d); }
-  document.getElementById('dpLbl').textContent = 'Solar Array — '+n+' Panel'+(n!==1?'s':'');
+function buildPanels(n){
+  var g=document.getElementById('panelGrid');g.innerHTML='';
+  for(var i=0;i<n;i++){var d=document.createElement('div');d.className='pd';g.appendChild(d);}
+  document.getElementById('dpLbl').textContent='Solar Array — '+n+' Panel'+(n!==1?'s':'');
 }
 buildPanels(16);
 
-/* SOLAR PHYSICS */
-function calcOut(tMin, cloud, panels) {
-  var h = tMin/60;
-  if (h<5||h>19.5) return 0;
-  return Math.max(0, Math.sin(Math.PI*(h-5)/14.5)*(1-(cloud/100)*0.85)*panels*0.42);
-}
-function calcKwh(tMin, cloud, panels) {
-  var sum=0;
-  for (var t=300; t<tMin; t+=60) sum += calcOut(t, cloud, panels);
-  return sum*0.85;
-}
+/* SET */
+function set(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
 
-/* SIM UPDATE */
-function updateSim() {
-  var tMin   = +document.getElementById('sl-time').value;
-  var cloud  = +document.getElementById('sl-cloud').value;
-  var panels = +document.getElementById('sl-panels').value;
-  var h = Math.floor(tMin/60), m = tMin%60;
-  document.getElementById('vTime').textContent   = ('0'+h).slice(-2)+':'+('0'+m).slice(-2);
-  document.getElementById('vCloud').textContent  = cloud+'%';
-  document.getElementById('vPanels').textContent = panels;
-  var out = calcOut(tMin, cloud, panels);
-  var kwh = calcKwh(tMin, cloud, panels);
-  document.getElementById('kOutput').textContent = out.toFixed(2);
-  document.getElementById('kKwh').textContent    = kwh.toFixed(1);
-  document.getElementById('kSave').textContent   = '€'+Math.round(kwh*30*0.22);
-  document.getElementById('kCo2').textContent    = Math.round(kwh*30*12*0.5);
-  buildPanels(panels);
-  document.querySelectorAll('.pc').forEach(function(c, i) {
-    if (out===0) { c.className='pc'; return; }
-    var ef = 1-(cloud/100)*0.55-Math.random()*0.08;
-    c.className='pc '+(ef>0.82?'hot':ef>0.25?'on':'');
+/* UPDATE */
+function update(){
+  var tm=+document.getElementById('sl-time').value;
+  var cl=+document.getElementById('sl-cloud').value;
+  var n=+document.getElementById('sl-panels').value;
+  var h=Math.floor(tm/60),m=tm%60;
+  set('vTime',('0'+h).slice(-2)+':'+('0'+m).slice(-2));
+  set('vCloud',cl+'%');
+  set('vPanels',n);
+  var out=calcOut(tm,cl,n),kwh=calcKwh(tm,cl,n),t=0.22;
+  set('kOut',out.toFixed(2)+' kW');
+  set('kKwh',kwh.toFixed(1)+' kWh');
+  set('kSav','€'+Math.round(kwh*30*t));
+  // Hero card
+  set('hc-pow',out.toFixed(2));
+  set('hc-kwh',kwh.toFixed(1));
+  set('hc-sav','€'+Math.round(kwh*30*t));
+  set('hc-co2',Math.round(kwh*30*12*.5));
+  // Panels
+  buildPanels(n);
+  document.querySelectorAll('.pd').forEach(function(c){
+    if(out===0){c.className='pd';return;}
+    var ef=1-(cl/100)*.55-Math.random()*.08;
+    c.className='pd '+(ef>.82?'hot':ef>.25?'on':'');
   });
-  drawChart(tMin, cloud);
+  drawMini(tm,cl,n);
+  drawHcChart(tm);
 }
 
-var autoplay = true, autoT = 720;
-['sl-time','sl-cloud','sl-panels'].forEach(function(id) {
-  document.getElementById(id).addEventListener('input', function() { autoplay=false; updateSim(); });
+/* AUTO */
+var auto=true,autoT=720;
+['sl-time','sl-cloud','sl-panels'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){auto=false;update();});});
+setInterval(function(){if(!auto)return;autoT=(autoT+12)%1440;document.getElementById('sl-time').value=autoT;update();},500);
+update();
+
+/* ── MODALS ── */
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow='';
+}
+document.querySelectorAll('.modal-overlay').forEach(function(el){
+  el.addEventListener('click',function(e){if(e.target===el)closeModal(el.id);});
 });
-setInterval(function() {
-  if (!autoplay) return;
-  autoT = (autoT+12)%1440;
-  document.getElementById('sl-time').value = autoT;
-  updateSim();
-}, 100);
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.open').forEach(function(m){m.classList.remove('open');});document.body.style.overflow='';}
+});
 
-var lastF = 0;
-function loop(now) {
-  if (now-lastF > 50) {
-    drawSky(+document.getElementById('sl-time').value, +document.getElementById('sl-cloud').value);
-    lastF = now;
-  }
-  requestAnimationFrame(loop);
+/* ── COOKIE BANNER ── */
+(function(){
+  if(localStorage.getItem('eko_cookies'))return;
+  setTimeout(function(){document.getElementById('cookieBanner').classList.add('show');},900);
+})();
+function acceptCookies(all){
+  localStorage.setItem('eko_cookies',all?'all':'essential');
+  var b=document.getElementById('cookieBanner');
+  b.style.transition='opacity .4s,transform .4s';
+  b.style.opacity='0';b.style.transform='translateY(20px)';
+  setTimeout(function(){b.remove();},420);
 }
-updateSim();
-requestAnimationFrame(loop);
+
 </script>
-</body>
-</html>
+
+<!-- ══════════════════════════════════════════════ MODALS ══ -->
+
+<!-- PRIVACY POLICY MODAL -->
+<div class="modal-overlay" id="modalPrivacy">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-tag">Legal</div>
+        <h2 class="modal-h">Privacy Policy</h2>
+        <p class="modal-sub">Last updated: 1 January 2026</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalPrivacy')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mlead">EkoSlnko s.r.o. ("EkoSlnko", "we", "us") is committed to protecting your personal data in accordance with the General Data Protection Regulation (GDPR) and applicable Slovak law. This policy explains what data we collect, why, and how we use it.</div>
+
+      <div class="msec-h">1. Data Controller</div>
+      <p class="msec-p">EkoSlnko s.r.o., IČO: 00 123 456, Tajovského 30, 974 01 Banská Bystrica, Slovakia.<br>Contact: <a href="/cdn-cgi/l/email-protection#d2a2a0bba4b3b1ab92b7b9bda1bebcb9bdfca1b9" style="color:var(--or)"><span class="__cf_email__" data-cfemail="91e1e3f8e7f0f2e8d1f4fafee2fdfffafebfe2fa">[email&#160;protected]</span></a></p>
+
+      <div class="msec-h">2. Data We Collect</div>
+      <p class="msec-p">We collect the following categories of personal data:</p>
+      <ul class="mlist">
+        <li><strong>Account data</strong> — name, email address, billing address when you register.</li>
+        <li><strong>Technical data</strong> — IP address, browser type, operating system, referral URL, pages visited, time spent on pages.</li>
+        <li><strong>Solar installation data</strong> — inverter readings, panel count, energy output figures sent by the EkoSlnko Bridge hardware device.</li>
+        <li><strong>Payment data</strong> — processed entirely by our payment processor (Stripe); we do not store card numbers.</li>
+        <li><strong>Support data</strong> — messages you send us via the contact form or email.</li>
+      </ul>
+
+      <div class="msec-h">3. Legal Basis for Processing</div>
+      <ul class="mlist">
+        <li><strong>Contract performance</strong> — to deliver the monitoring service you subscribed to.</li>
+        <li><strong>Legitimate interest</strong> — to improve the platform, prevent fraud, and ensure security.</li>
+        <li><strong>Consent</strong> — for optional marketing emails. You may withdraw consent at any time.</li>
+        <li><strong>Legal obligation</strong> — to comply with Slovak accounting and tax law (invoices retained 10 years).</li>
+      </ul>
+
+      <div class="msec-h">4. How We Use Your Data</div>
+      <ul class="mlist">
+        <li>Provide, maintain, and improve the EkoSlnko dashboard and API.</li>
+        <li>Send transactional emails (fault alerts, invoices, password resets).</li>
+        <li>Send marketing emails where you have opted in.</li>
+        <li>Conduct aggregated, anonymised analytics to improve AI forecasting accuracy.</li>
+        <li>Respond to support requests.</li>
+      </ul>
+
+      <div class="msec-h">5. Data Sharing</div>
+      <p class="msec-p">We do <strong>not sell</strong> your personal data. We share data only with trusted sub-processors necessary to operate the service:</p>
+      <ul class="mlist">
+        <li><strong>Hetzner Online GmbH</strong> — cloud hosting (EU servers, Germany).</li>
+        <li><strong>Stripe Inc.</strong> — payment processing (EU data residency enabled).</li>
+        <li><strong>Brevo SAS</strong> — transactional email delivery.</li>
+        <li><strong>ECMWF</strong> — anonymised location data for weather forecasting.</li>
+      </ul>
+
+      <div class="msec-h">6. Data Retention</div>
+      <p class="msec-p">Account and monitoring data is retained for the duration of your subscription plus 90 days after cancellation. You may request immediate deletion at any time. Invoices are retained for 10 years as required by Slovak law.</p>
+
+      <div class="msec-h">7. Your Rights</div>
+      <p class="msec-p">Under GDPR you have the right to: access, correct, delete, or export your personal data; restrict or object to processing; and lodge a complaint with the Slovak Data Protection Authority (<a href="https://dataprotection.gov.sk" target="_blank" style="color:var(--or)">dataprotection.gov.sk</a>).</p>
+      <p class="msec-p">Submit a request to <a href="/cdn-cgi/l/email-protection#6b1b19021d0a08122b0e00041807050004451800" style="color:var(--or)"><span class="__cf_email__" data-cfemail="0676746f7067657f46636d69756a686d6928756d">[email&#160;protected]</span></a>. We respond within 30 days.</p>
+
+      <div class="msec-h">8. Security</div>
+      <p class="msec-p">All data is encrypted in transit (TLS 1.3) and at rest (AES-256). We conduct annual security audits and operate a responsible disclosure programme.</p>
+
+      <div class="msec-h">9. Changes to This Policy</div>
+      <p class="msec-p">We will notify you by email of material changes at least 14 days before they take effect. Continued use of the service after that date constitutes acceptance.</p>
+    </div>
+    <div class="modal-ft">
+      <span class="modal-ft-note">Questions? <a href="/cdn-cgi/l/email-protection#78080a110e191b01381d13170b14161317560b13" style="color:var(--or)"><span class="__cf_email__" data-cfemail="d4a4a6bda2b5b7ad94b1bfbba7b8babfbbfaa7bf">[email&#160;protected]</span></a></span>
+      <button class="modal-ft-btn" onclick="closeModal('modalPrivacy')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TERMS OF SERVICE MODAL -->
+<div class="modal-overlay" id="modalTerms">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-tag">Legal</div>
+        <h2 class="modal-h">Terms of Service</h2>
+        <p class="modal-sub">Last updated: 1 January 2026 · Governed by Slovak law</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalTerms')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mlead">These Terms of Service ("Terms") govern your access to and use of EkoSlnko's website, software, and hardware products. By creating an account or purchasing hardware you agree to these Terms.</div>
+
+      <div class="msec-h">1. The Service</div>
+      <p class="msec-p">EkoSlnko provides a cloud-based solar monitoring platform accessible via <strong>app.ekoslnko.sk</strong> and a companion hardware device ("EkoSlnko Bridge"). The service includes real-time data dashboards, AI yield forecasting, alert notifications, and data export tools.</p>
+
+      <div class="msec-h">2. Eligibility</div>
+      <p class="msec-p">You must be at least 18 years old and have legal capacity to enter into contracts. The service is intended for use within Slovakia, Czech Republic, Austria, Poland, and Hungary. Use outside these territories is at your own risk.</p>
+
+      <div class="msec-h">3. Account Registration</div>
+      <p class="msec-p">You are responsible for maintaining the confidentiality of your account credentials and for all activity that occurs under your account. Notify us immediately at <a href="/cdn-cgi/l/email-protection#09616c656566496c62667a65676266277a62" style="color:var(--or)"><span class="__cf_email__" data-cfemail="6b030e0707042b0e00041807050004451800">[email&#160;protected]</span></a> if you suspect unauthorised access.</p>
+
+      <div class="msec-h">4. Subscription Plans & Billing</div>
+      <ul class="mlist">
+        <li>Subscriptions are billed monthly or annually in advance via Stripe.</li>
+        <li>Prices are in EUR and include applicable VAT where required.</li>
+        <li>Annual plans are prepaid; no partial refunds are issued if you downgrade mid-year.</li>
+        <li>We reserve the right to change pricing with 30 days notice by email.</li>
+      </ul>
+
+      <div class="msec-h">5. Hardware</div>
+      <ul class="mlist">
+        <li>The EkoSlnko Bridge is sold at a one-time price of €49 (excl. shipping).</li>
+        <li>Free shipping applies to SK and CZ. Other territories: actual carrier cost.</li>
+        <li>You have a 14-day right of withdrawal from delivery under EU consumer law.</li>
+        <li>Hardware carries a 2-year manufacturer's warranty covering defects in materials and workmanship.</li>
+        <li>Warranty does not cover damage from improper installation, power surges, or unauthorised modification.</li>
+      </ul>
+
+      <div class="msec-h">6. Acceptable Use</div>
+      <p class="msec-p">You agree not to: reverse-engineer the Bridge firmware; resell access to the platform without a written reseller agreement; upload malicious code; use automated scraping tools against our API beyond your plan limits; or use the service to violate any applicable law.</p>
+
+      <div class="msec-h">7. Service Availability</div>
+      <p class="msec-p">We target 99.5% monthly uptime for the dashboard. Planned maintenance will be announced 24 hours in advance. We are not liable for outages caused by third-party infrastructure (internet providers, inverter manufacturers, weather data feeds).</p>
+
+      <div class="msec-h">8. Intellectual Property</div>
+      <p class="msec-p">All software, design, algorithms, and AI models are the exclusive property of EkoSlnko s.r.o. You retain ownership of your solar production data and may export it at any time.</p>
+
+      <div class="msec-h">9. Limitation of Liability</div>
+      <p class="msec-p">To the maximum extent permitted by law, EkoSlnko's aggregate liability for any claim is limited to the amount you paid in the 12 months preceding the claim. We are not liable for indirect, consequential, or incidental damages including lost profits.</p>
+
+      <div class="msec-h">10. Termination</div>
+      <p class="msec-p">You may cancel your subscription at any time from account settings. Access remains active until the end of the billing period. We may terminate accounts for breach of these Terms with 7 days notice (or immediately for serious violations).</p>
+
+      <div class="msec-h">11. Governing Law & Disputes</div>
+      <p class="msec-p">These Terms are governed by the laws of the Slovak Republic. Disputes shall first be submitted to mediation. If unresolved, they shall be settled by the competent court in Banská Bystrica, Slovakia.</p>
+
+      <div class="msec-h">12. Changes to Terms</div>
+      <p class="msec-p">We will notify you by email at least 14 days before material changes. Your continued use after the effective date constitutes acceptance of the updated Terms.</p>
+    </div>
+    <div class="modal-ft">
+      <span class="modal-ft-note">Questions? <a href="/cdn-cgi/l/email-protection#741c1118181b34111f1b07181a1f1b5a071f" style="color:var(--or)"><span class="__cf_email__" data-cfemail="bed6dbd2d2d1fedbd5d1cdd2d0d5d190cdd5">[email&#160;protected]</span></a></span>
+      <button class="modal-ft-btn" onclick="closeModal('modalTerms')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- COOKIES MODAL -->
+<div class="modal-overlay" id="modalCookies">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-tag">Legal</div>
+        <h2 class="modal-h">Cookie Policy</h2>
+        <p class="modal-sub">Last updated: 1 January 2026</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalCookies')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mlead">This Cookie Policy explains how EkoSlnko s.r.o. uses cookies and similar technologies on <strong>ekoslnko.sk</strong> and <strong>app.ekoslnko.sk</strong>. By using our website you agree to the use of essential cookies. For optional cookies, we ask for your explicit consent.</div>
+
+      <div class="msec-h">What are cookies?</div>
+      <p class="msec-p">Cookies are small text files stored on your device by your browser. They allow websites to remember your preferences, authenticate sessions, and understand how pages are used.</p>
+
+      <div class="msec-h">1. Strictly Necessary Cookies</div>
+      <p class="msec-p">These cookies are required for the website to function and cannot be disabled.</p>
+      <div class="cookie-table">
+        <div class="ct-row ct-head"><span>Name</span><span>Provider</span><span>Purpose</span><span>Duration</span></div>
+        <div class="ct-row"><span><code>eko_session</code></span><span>EkoSlnko</span><span>Maintains your login session</span><span>Session</span></div>
+        <div class="ct-row"><span><code>eko_csrf</code></span><span>EkoSlnko</span><span>CSRF protection token</span><span>Session</span></div>
+        <div class="ct-row"><span><code>eko_cookies</code></span><span>EkoSlnko</span><span>Stores your cookie consent choice</span><span>1 year</span></div>
+      </div>
+
+      <div class="msec-h">2. Functional Cookies</div>
+      <p class="msec-p">These cookies enhance usability by remembering your preferences.</p>
+      <div class="cookie-table">
+        <div class="ct-row ct-head"><span>Name</span><span>Provider</span><span>Purpose</span><span>Duration</span></div>
+        <div class="ct-row"><span><code>eko_theme</code></span><span>EkoSlnko</span><span>Saves dark/light mode preference</span><span>1 year</span></div>
+        <div class="ct-row"><span><code>eko_currency</code></span><span>EkoSlnko</span><span>Saves selected currency / tariff</span><span>6 months</span></div>
+      </div>
+
+      <div class="msec-h">3. Analytics Cookies</div>
+      <p class="msec-p">Used to understand how visitors use our website. All data is anonymised and processed on EU servers. We use <strong>Plausible Analytics</strong>, a privacy-friendly alternative that does not use cross-site tracking cookies.</p>
+      <div class="cookie-table">
+        <div class="ct-row ct-head"><span>Name</span><span>Provider</span><span>Purpose</span><span>Duration</span></div>
+        <div class="ct-row"><span><code>_plausible</code></span><span>Plausible.io</span><span>Anonymised page view counts</span><span>None (no cookie stored)</span></div>
+      </div>
+
+      <div class="msec-h">4. No Advertising Cookies</div>
+      <p class="msec-p">We do <strong>not</strong> use advertising, retargeting, or third-party tracking cookies. We do not share data with ad networks.</p>
+
+      <div class="msec-h">5. How to Manage Cookies</div>
+      <p class="msec-p">You can manage cookies through your browser settings. Note that disabling strictly necessary cookies will prevent you from logging in. Links to browser instructions:</p>
+      <ul class="mlist">
+        <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" style="color:var(--or)">Google Chrome</a></li>
+        <li><a href="https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences" target="_blank" style="color:var(--or)">Mozilla Firefox</a></li>
+        <li><a href="https://support.apple.com/en-gb/guide/safari/sfri11471/mac" target="_blank" style="color:var(--or)">Apple Safari</a></li>
+        <li><a href="https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge" target="_blank" style="color:var(--or)">Microsoft Edge</a></li>
+      </ul>
+
+      <div class="msec-h">6. Contact</div>
+      <p class="msec-p">For questions about our use of cookies contact <a href="/cdn-cgi/l/email-protection#09797b607f686a70496c62667a65676266277a62" style="color:var(--or)"><span class="__cf_email__" data-cfemail="6f1f1d06190e0c162f0a04001c03010400411c04">[email&#160;protected]</span></a>.</p>
+    </div>
+    <div class="modal-ft">
+      <span class="modal-ft-note">Questions? <a href="/cdn-cgi/l/email-protection#7202001b0413110b3217191d011e1c191d5c0119" style="color:var(--or)"><span class="__cf_email__" data-cfemail="80f0f2e9f6e1e3f9c0e5ebeff3eceeebefaef3eb">[email&#160;protected]</span></a></span>
+      <button class="modal-ft-btn" onclick="closeModal('modalCookies')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- GDPR MODAL -->
+<div class="modal-overlay" id="modalGdpr">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-tag">Legal</div>
+        <h2 class="modal-h">GDPR &amp; Data Rights</h2>
+        <p class="modal-sub">General Data Protection Regulation — your rights explained</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalGdpr')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mlead">EkoSlnko s.r.o. is fully committed to compliance with the EU General Data Protection Regulation (GDPR, Regulation 2016/679). This page summarises your rights and how to exercise them.</div>
+
+      <div class="msec-h">Our GDPR Commitments</div>
+      <div class="gdpr-grid">
+        <div class="gdpr-card">
+          <div class="gdpr-ico">🏛️</div>
+          <div class="gdpr-card-h">EU Servers Only</div>
+          <p class="gdpr-card-p">All personal data is processed and stored exclusively on servers located in the European Union (Hetzner, Germany).</p>
+        </div>
+        <div class="gdpr-card">
+          <div class="gdpr-ico">🔒</div>
+          <div class="gdpr-card-h">TLS 1.3 Encryption</div>
+          <p class="gdpr-card-p">All data in transit is encrypted with TLS 1.3. Data at rest is encrypted with AES-256.</p>
+        </div>
+        <div class="gdpr-card">
+          <div class="gdpr-ico">🚫</div>
+          <div class="gdpr-card-h">No Data Selling</div>
+          <p class="gdpr-card-p">We never sell, rent, or share personal data with advertisers or data brokers — ever.</p>
+        </div>
+        <div class="gdpr-card">
+          <div class="gdpr-ico">📤</div>
+          <div class="gdpr-card-h">Full Data Export</div>
+          <p class="gdpr-card-p">Export all your solar data and account information at any time as CSV or JSON from your account settings.</p>
+        </div>
+        <div class="gdpr-card">
+          <div class="gdpr-ico">🗑️</div>
+          <div class="gdpr-card-h">Right to Deletion</div>
+          <p class="gdpr-card-p">Request complete deletion of your account and associated data at any time. We process requests within 30 days.</p>
+        </div>
+        <div class="gdpr-card">
+          <div class="gdpr-ico">✅</div>
+          <div class="gdpr-card-h">Consent-Based</div>
+          <p class="gdpr-card-p">Optional marketing communications are sent only with your explicit opt-in consent. Unsubscribe in one click.</p>
+        </div>
+      </div>
+
+      <div class="msec-h">Your Rights Under GDPR</div>
+      <ul class="mlist">
+        <li><strong>Right of access (Art. 15)</strong> — obtain a copy of all personal data we hold about you.</li>
+        <li><strong>Right to rectification (Art. 16)</strong> — correct inaccurate or incomplete personal data.</li>
+        <li><strong>Right to erasure (Art. 17)</strong> — request deletion of your data ("right to be forgotten").</li>
+        <li><strong>Right to restriction (Art. 18)</strong> — restrict how we process your data in certain circumstances.</li>
+        <li><strong>Right to data portability (Art. 20)</strong> — receive your data in a structured, machine-readable format.</li>
+        <li><strong>Right to object (Art. 21)</strong> — object to processing based on legitimate interest or for direct marketing.</li>
+        <li><strong>Right to withdraw consent (Art. 7)</strong> — withdraw consent at any time without affecting prior processing.</li>
+      </ul>
+
+      <div class="msec-h">How to Exercise Your Rights</div>
+      <p class="msec-p">Email <a href="/cdn-cgi/l/email-protection#4434362d3225273d04212f2b37282a2f2b6a372f" style="color:var(--or)"><span class="__cf_email__" data-cfemail="1f6f6d76697e7c665f7a74706c73717470316c74">[email&#160;protected]</span></a> with the subject line "GDPR Request". We will verify your identity and respond within <strong>30 days</strong>. Complex requests may be extended by up to 60 additional days, with notice.</p>
+
+      <div class="msec-h">Data Protection Officer</div>
+      <p class="msec-p">EkoSlnko is not currently required to appoint a DPO under GDPR Article 37. Privacy matters are handled directly by the founding team. Contact: <a href="/cdn-cgi/l/email-protection#f282809b8493918bb297999d819e9c999ddc8199" style="color:var(--or)"><span class="__cf_email__" data-cfemail="4636342f3027253f06232d29352a282d2968352d">[email&#160;protected]</span></a>.</p>
+
+      <div class="msec-h">Supervisory Authority</div>
+      <p class="msec-p">If you believe we have not handled your data correctly, you have the right to lodge a complaint with the <strong>Office for Personal Data Protection of the Slovak Republic</strong>:</p>
+      <ul class="mlist">
+        <li>Website: <a href="https://dataprotection.gov.sk" target="_blank" style="color:var(--or)">dataprotection.gov.sk</a></li>
+        <li>Address: Hraničná 12, 820 07 Bratislava, Slovakia</li>
+        <li>Phone: +421 2 3231 3214</li>
+      </ul>
+
+      <div class="msec-h">Cross-Border Transfers</div>
+      <p class="msec-p">We do not transfer personal data outside the European Economic Area (EEA). All sub-processors are either EEA-based or certified under the EU–US Data Privacy Framework where applicable.</p>
+    </div>
+    <div class="modal-ft">
+      <span
