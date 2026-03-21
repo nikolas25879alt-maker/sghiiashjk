@@ -997,7 +997,13 @@ function update(){
   });
   drawMini(tm,cl,n);
   drawHcChart(tm);
+  _skyTm=tm;_skyCl=cl;
 }
+
+/* SKY ANIMATION LOOP — runs continuously so sun rays & stars twinkle */
+var _skyTm=720,_skyCl=0;
+function skyLoop(){requestAnimationFrame(skyLoop);drawSky(_skyTm,_skyCl);}
+skyLoop();
 
 /* AUTO */
 var auto=true,autoT=720;
