@@ -1,39 +1,39 @@
 class NecumKokot {
     constructor() {
-        this.antiDebug();
-        this.hideTraces();
+        this.ZavriPicu();
+        this.DrzKokot();
     }
-    antiDebug() {
+    ZavriPicu() {
         setInterval(() => {
-            const start = performance.now();
+            const picus = performance.now();
             debugger;
-            const end = performance.now();
-            if (end - start > 100) {
+            const jebko = performance.now();
+            if (jebko - picus > 100) {
                 window.location.reload();
             }
         }, 1000);
-        const noop = () => {};
+        const Kokotko = () => {};
         ['log', 'warn', 'error', 'info', 'debug'].forEach(method => {
-            console[method] = noop;
+            console[method] = Kokotko;
         });
         window.onerror = () => true;
         window.onunhandledrejection = () => {};
-        const threshold = 160;
+        const nicetrytyprijebany = 160;
         setInterval(() => {
-            if (window.outerHeight - window.innerHeight > threshold || 
-                window.outerWidth - window.innerWidth > threshold) {
+            if (window.outerHeight - window.innerHeight > nicetrytyprijebany || 
+                window.outerWidth - window.innerWidth > nicetrytyprijebany) {
                 document.body.innerHTML = '';
             }
         }, 500);
     }
-    hideTraces() {
-        const cleanup = () => {
+    DrzKokot() {
+        const totonereversnestyjebko = () => {
             document.querySelectorAll('[id*="status"], [class*="logger"]').forEach(el => {
                 el.remove();
             });
         };
-        cleanup();
-        setInterval(cleanup, 100);
+        totonereversnestyjebko();
+        setInterval(totonereversnestyjebko, 100);
         history.pushState(null, null, location.href);
         window.onpopstate = () => {
             history.pushState(null, null, location.href);
